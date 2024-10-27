@@ -66,7 +66,8 @@ export async function finishStudySession(
           : `\n🔖 Asignatura: ${finishedStudySessionData.subjectName}`
       }
 🕑 Tiempo Total: ${finishedStudySessionData.humanReadableTotalTime}
-💯 Puntuación obtenida: ${finishedStudySessionData.points}`
+💯 Puntuación obtenida: ${finishedStudySessionData.points}
+🔑 ID SESIÓN: ${finishedStudySessionData.id}`
     );
   } catch (error: any) {
     message.channel.send(error.message);
@@ -114,8 +115,8 @@ export async function getDetailedRanking(
       const pointsBySubjectString = Object.entries(subjects)
         .map(([subject, points]) => {
           return subject !== "de forma general"
-            ? `\t\t\t${subject}: ${points} puntos`
-            : `\t\t\tExtras: ${points} puntos`;
+            ? `\t\t\t▫️ ${subject}: ${points} puntos`
+            : `\t\t\t▫️ Extras: ${points} puntos`;
         })
         .join("\n");
 
@@ -149,9 +150,11 @@ export async function getLastSessions(
 
   const response = (await lastSessions).map(
     (session, index) =>
-      `${index + 1} <@${session.dataValues.userId}> estuvo estudiando \`${
+      `${index + 1} - <@${session.dataValues.userId}> estuvo estudiando \`${
         session.dataValues.subjectName
-      }\` por un tiempo de \`${session.dataValues.humanReadableTotalTime}\``
+      }\` por un tiempo de \`${
+        session.dataValues.humanReadableTotalTime
+      }\` \`[${session.dataValues.id}] \``
   );
 
   message.channel.send(

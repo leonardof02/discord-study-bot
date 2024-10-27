@@ -5,7 +5,9 @@ import {
 } from "../models/ArchivedStudySession";
 
 export async function archiveStudySession(studySession: StudySessionData) {
-  (await ArchivedStudySession.create(studySession)).save();
+  const newStudySession = await ArchivedStudySession.create(studySession);
+  newStudySession.save();
+  return newStudySession.dataValues.id;
 }
 
 export async function getArchivedSessions() {

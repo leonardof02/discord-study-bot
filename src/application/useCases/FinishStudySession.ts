@@ -18,7 +18,7 @@ export async function FinishStudySession(
     totalTime,
     subjectName: existentStudySession.subjectName,
     startTime: existentStudySession.startTime,
-    points: parseInt(
+    points: parseFloat(
       (
         Math.round(
           ((Date.now() - existentStudySession.startTime) / (1000 * 60)) * 100
@@ -29,7 +29,9 @@ export async function FinishStudySession(
     userId,
   };
 
-  ArchivedSessionsRepository.archiveStudySession(finishedStudySessionData);
+  const sessionId = await ArchivedSessionsRepository.archiveStudySession(
+    finishedStudySessionData
+  );
   StudySessionRepository.removeStudySession(userId);
-  return finishedStudySessionData;
+  return { ...finishedStudySessionData, id: sessionId };
 }
