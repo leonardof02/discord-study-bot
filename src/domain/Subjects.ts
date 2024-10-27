@@ -1,0 +1,15 @@
+export const Subjects = [
+  "Historia de España",
+  "Historia de la Filosofía",
+  "Lengua Castellana y Literatura",
+  "Inglés",
+  "Dibujo Técnico",
+  "Matemáticas",
+  "Latín",
+  "Geografía",
+  "Historia del Arte",
+  "Biología",
+  "Química",
+  "Física",
+  "Latín",
+];

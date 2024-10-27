@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./dist/Bot.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "pnpm tsc --watch && pnpm nodemon ./dist/bot.js"
+    "dev": "npx tsc --watch && nodemon ./dist/bot.js"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +17,8 @@
     "@types/ws": "^8.5.12",
     "discord.js": "^14.14.1",
     "dotenv": "^16.4.5",
+    "knex": "^3.1.0",
+    "objection": "^3.1.5",
     "sequelize": "^6.37.3",
     "sqlite3": "^5.1.7",
     "ts-node": "^10.9.2",
@@ -24,5 +26,6 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.4"
-  }
+  },
+  "packageManager": "pnpm@9.12.2+sha512.22721b3a11f81661ae1ec68ce1a7b879425a1ca5b991c975b074ac220b187ce56c708fe5db69f4c962c989452eee76c82877f4ee80f474cebd61ee13461b6228"
 }

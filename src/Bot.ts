@@ -1,7 +1,7 @@
-import { Client, GatewayIntentBits, EmbedBuilder } from "discord.js";
+import { Client, GatewayIntentBits } from "discord.js";
 import { configDotenv } from "dotenv";
-import { manage } from "./CommandManage";
-import { syncDatabase } from "./db/DbConnection";
+import { manage } from "./presentation/CommandManage";
+import { syncDatabase } from "./infrastructure/DbConnection";
 
 configDotenv();
 
@@ -27,3 +27,6 @@ client.on("messageCreate", (message) => {
 syncDatabase();
 const token = process.env.DISCORD_TOKEN;
 client.login(token);
+client.on("ready", () => {
+  console.log("El bot está skibidi toilet! 🗣️🚽");
+});

@@ -1,11 +1,8 @@
-import sequelize, { DataTypes, Model, Optional } from "sequelize";
-import DbConnection from "./DbConnection";
+import { DataTypes, Model, Optional } from "sequelize";
+import DbConnection from "../DbConnection";
+import { StudySessionData } from "../../domain/StudySessionData";
 
-export interface StudySessionData extends StudySession {
-  id?: number;
-  userId: string;
-  humanReadableTotalTime: string;
-}
+
 
 export const ArchivedStudySession = DbConnection.define<
   Model<StudySessionData, Optional<StudySessionData, "id">>
@@ -38,5 +35,8 @@ export const ArchivedStudySession = DbConnection.define<
   },
   {
     tableName: "studySessions",
+    paranoid: false,
   }
 );
+export { StudySessionData };
+

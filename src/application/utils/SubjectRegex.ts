@@ -1,18 +1,4 @@
-export const subjects = [
-  "Historia de España",
-  "Historia de la Filosofía",
-  "Lengua Castellana y Literatura",
-  "Inglés",
-  "Dibujo Técnico",
-  "Matemáticas",
-  "Latín",
-  "Geografía",
-  "Historia del Arte",
-  "Biología",
-  "Química",
-  "Física",
-  "Latín",
-];
+import { Subjects } from "../../domain/Subjects";
 
 const accentMap: { [key: string]: string } = {
   a: "[aáÁ]",
@@ -37,8 +23,8 @@ function createPartialMatchRegex(subject: string): RegExp {
 }
 
 export function getSubject(subjectName: string) {
+  if (subjectName == "mates") return "Matemáticas";
   const regex = createPartialMatchRegex(subjectName);
-  const matchedSubjects = subjects.filter((subject) => regex.test(subject));
-  console.log(matchedSubjects);
+  const matchedSubjects = Subjects.filter((subject) => regex.test(subject));
   return matchedSubjects[0];
 }

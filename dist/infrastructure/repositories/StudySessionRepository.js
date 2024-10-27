@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.addStudySession = addStudySession;
+exports.removeStudySession = removeStudySession;
+exports.getStudySession = getStudySession;
+const activeStudySessions = {};
+function addStudySession(studySession) {
+    activeStudySessions[studySession.userId] = studySession;
+}
+function removeStudySession(userId) {
+    delete activeStudySessions[userId];
+}
+function getStudySession(userId) {
+    return activeStudySessions[userId];
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiU3R1ZHlTZXNzaW9uUmVwb3NpdG9yeS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9pbmZyYXN0cnVjdHVyZS9yZXBvc2l0b3JpZXMvU3R1ZHlTZXNzaW9uUmVwb3NpdG9yeS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztBQUlBLDBDQUVDO0FBRUQsZ0RBRUM7QUFFRCwwQ0FFQztBQVpELE1BQU0sbUJBQW1CLEdBQWlDLEVBQUUsQ0FBQztBQUU3RCxTQUFnQixlQUFlLENBQUMsWUFBOEI7SUFDNUQsbUJBQW1CLENBQUMsWUFBWSxDQUFDLE1BQU0sQ0FBQyxHQUFHLFlBQVksQ0FBQztBQUMxRCxDQUFDO0FBRUQsU0FBZ0Isa0JBQWtCLENBQUMsTUFBYztJQUMvQyxPQUFPLG1CQUFtQixDQUFDLE1BQU0sQ0FBQyxDQUFDO0FBQ3JDLENBQUM7QUFFRCxTQUFnQixlQUFlLENBQUMsTUFBYztJQUM1QyxPQUFPLG1CQUFtQixDQUFDLE1BQU0sQ0FBQyxDQUFDO0FBQ3JDLENBQUMifQ==
