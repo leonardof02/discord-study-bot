@@ -7,4 +7,5 @@ export type Command =
   | "!help"
   | "!ranking_detallado"
   | "!cambiar_asignatura"
-  | "!reto_personalizado";
+  | "!reto_personalizado"
+  | "!info";

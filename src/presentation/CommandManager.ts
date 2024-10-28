@@ -14,6 +14,7 @@ import {
 import { sendHelp } from "./controllers/HelpController";
 import { createCustomChallenge } from "./controllers/ChallengeController";
 import { Command } from "./types/Command";
+import { getUserInfo } from "./controllers/UserInfoController";
 
 const actions: BotActionRouter = {
   "!ranking": getRanking,
@@ -25,6 +26,7 @@ const actions: BotActionRouter = {
   "!help": sendHelp,
   "!cambiar_asignatura": changeSubjectOfSession,
   "!reto_personalizado": createCustomChallenge,
+  "!info": getUserInfo,
 };
 
 export function manage(message: OmitPartialGroupDMChannel<Message<boolean>>) {

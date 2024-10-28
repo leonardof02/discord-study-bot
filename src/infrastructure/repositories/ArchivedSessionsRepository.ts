@@ -91,3 +91,37 @@ export async function getPointsSumsPerUserWithSubject() {
 
   return usersWithPointsBySubject;
 }
+
+type UserPointsBySubject = { subjectName: string; totalPoints: number }[];
+
+export async function getPointsSumsWithSubjectFromUser(userId: string) {
+  const results = await ArchivedStudySession.findAll({
+    attributes: [
+      "subjectName",
+      [DbConnection.fn("SUM", DbConnection.col("points")), "totalPoints"],
+    ],
+    group: ["subjectName"],
+    order: [["subjectName", "ASC"]],
+    where: {
+      userId,
+    },
+  });
+
+  const pointsBySubject: UserPointsBySubject = results.map((item) => ({
+    subjectName: item.get("subjectName") as string,
+    totalPoints: parseFloat((item.get("totalPoints") as number).toFixed(2)),
+  }));
+
+  return pointsBySubject;
+}
+
+export async function getStudySessionsFromUser(userId: string) {
+  const lastSessions = await ArchivedStudySession.findAll({
+    order: [["createdAt", "DESC"]],
+  });
+
+  return lastSessions.map((session) => ({
+    subjectName: session.dataValues.subjectName,
+    totalPoints: session.dataValues.points,
+  }));
+}
