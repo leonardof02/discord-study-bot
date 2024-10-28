@@ -40,7 +40,7 @@ export async function getPointsSumsPerUser() {
 
   return results.map((item) => ({
     userId: item.get("userId"),
-    totalPoints: item.get("totalPoints"),
+    totalPoints: parseFloat((item.get("totalPoints") as number).toFixed(2)),
   })) as AggregateResult[];
 }
 
@@ -79,7 +79,7 @@ export async function getPointsSumsPerUserWithSubject() {
     const { userId, subject, totalPoints } = {
       userId: item.get("userId") as string,
       subject: item.get("subjectName") as string,
-      totalPoints: item.get("totalPoints") as number,
+      totalPoints: parseFloat((item.get("totalPoints") as number).toFixed(2)),
     };
 
     if (!usersWithPointsBySubject[userId]) {

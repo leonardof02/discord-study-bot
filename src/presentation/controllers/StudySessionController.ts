@@ -1,17 +1,24 @@
-import { Message, OmitPartialGroupDMChannel } from "discord.js";
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonInteraction,
+  ButtonStyle,
+  Message,
+  OmitPartialGroupDMChannel,
+} from "discord.js";
 
 // use cases
 import { StartStudySession } from "../../application/useCases/StartStudySession";
 import { FinishStudySession } from "../../application/useCases/FinishStudySession";
-import {
-  GetDetailedStudyRanking,
-  GetStudyRankingByUser,
-} from "../../application/useCases/GetStudyRanking";
 import { GetLastStudySessions } from "../../application/useCases/GetLastStudySessions";
 
 import { getSubject } from "../../application/utils/SubjectRegex";
+import { ChangeSessionSubject } from "../../application/useCases/ChangeSessionSubject";
+import { GetActiveChallenge } from "../../application/useCases/GetActiveChallenge";
+import ButtonActions from "../constants/ButtonActions";
+import { formatDuration } from "../utils/TimeUtils";
 
-export function startStudySession(
+export async function startStudySession(
   message: OmitPartialGroupDMChannel<Message<boolean>>,
   args: string[]
 ) {
@@ -27,26 +34,101 @@ export function startStudySession(
   }
 
   try {
-    StartStudySession(userId, subjectName);
-    message.channel.send(
-      `⏲️ <@${userId}> comenzaste a estudiar ${subjectName}`
+    const activeChallenge = GetActiveChallenge(userId);
+    if (!activeChallenge) {
+      StartStudySession(userId, subjectName);
+      message.channel.send(
+        `⏲️ <@${userId}> comenzaste a estudiar ${subjectName}`
+      );
+      return;
+    }
+
+    if (activeChallenge.isActive) {
+      message.channel.send(
+        `⏲️ <@${userId}> ya estás estudiando ${subjectName}`
+      );
+      return;
+    }
+
+    const confirmButton = new ButtonBuilder()
+      .setCustomId(
+        `${ButtonActions.StartStudySessionWithChallenge}@${subjectName}/${userId}`
+      )
+      .setLabel("SI")
+      .setStyle(ButtonStyle.Success);
+
+    const cancelButton = new ButtonBuilder()
+      .setCustomId(
+        `${ButtonActions.StartStudySessionWithoutChallenge}@${subjectName}`
+      )
+      .setLabel("NO")
+      .setStyle(ButtonStyle.Danger);
+
+    const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+      confirmButton,
+      cancelButton
     );
+
+    await message.reply({
+      content: `¿Quieres aceptar el reto de ${formatDuration(
+        activeChallenge.time
+      )} en esta sesión?`,
+      components: [row],
+    });
   } catch (error: any) {
     message.channel.send(error.message);
   }
 }
 
-export function startGeneralStudySession(
+export async function startGeneralStudySession(
   message: OmitPartialGroupDMChannel<Message<boolean>>,
   args: string[]
 ) {
   const userId = message.author.id;
 
   try {
-    StartStudySession(userId);
-    message.channel.send(
-      `⏲️ <@${userId}> comenzaste a estudiar de forma general`
+    const activeChallenge = GetActiveChallenge(userId);
+
+    if (!activeChallenge) {
+      StartStudySession(userId);
+      message.channel.send(
+        `⏲️ <@${userId}> comenzaste a estudiar de forma general`
+      );
+      return;
+    }
+
+    if (activeChallenge.isActive) {
+      message.channel.send(
+        `⏲️ <@${userId}> ya estás estudiando de forma general`
+      );
+      return;
+    }
+
+    const confirmButton = new ButtonBuilder()
+      .setCustomId(
+        `${ButtonActions.StartStudySessionWithChallenge}@de forma general/${userId}`
+      )
+      .setLabel("SI")
+      .setStyle(ButtonStyle.Success);
+
+    const cancelButton = new ButtonBuilder()
+      .setCustomId(
+        `${ButtonActions.StartStudySessionWithoutChallenge}@de forma general`
+      )
+      .setLabel("NO")
+      .setStyle(ButtonStyle.Danger);
+
+    const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+      confirmButton,
+      cancelButton
     );
+
+    await message.reply({
+      content: `¿Quieres aceptar el reto de ${formatDuration(
+        activeChallenge.time
+      )} en esta sesión?`,
+      components: [row],
+    });
   } catch (error: any) {
     message.channel.send(error.message);
   }
@@ -59,84 +141,30 @@ export async function finishStudySession(
   const userId = message.author.id;
   try {
     const finishedStudySessionData = await FinishStudySession(userId);
+
     message.channel.send(
       `Terminada sesión de estudio de <@${userId}>${
         finishedStudySessionData.subjectName === "de forma general"
           ? ""
           : `\n🔖 Asignatura: ${finishedStudySessionData.subjectName}`
       }
-🕑 Tiempo Total: ${finishedStudySessionData.humanReadableTotalTime}
-💯 Puntuación obtenida: ${finishedStudySessionData.points}
-🔑 ID SESIÓN: ${finishedStudySessionData.id}`
+  🕑 Tiempo Total: ${finishedStudySessionData.humanReadableTotalTime}
+  💯 Puntuación obtenida: ${finishedStudySessionData.points}${
+        finishedStudySessionData.challenge &&
+        finishedStudySessionData.points > 0
+          ? "\n✅ Reto completado con éxito\n➕ Puntos extra ganados"
+          : ""
+      }${
+        finishedStudySessionData.points === 0
+          ? "\n❌ No has completado el reto\n➖ Has perdido todos los puntos"
+          : ""
+      }
+  🔑 ID SESIÓN: ${finishedStudySessionData.id}`
     );
+    return;
   } catch (error: any) {
     message.channel.send(error.message);
   }
-}
-
-export async function getRanking(
-  message: OmitPartialGroupDMChannel<Message<boolean>>,
-  args: string[]
-) {
-  const results = await GetStudyRankingByUser();
-
-  const ranking: string[] = results.map((result, index) => {
-    return `${index + 1} - <@${result.userId}> | ${result.totalPoints} Puntos`;
-  });
-
-  ranking[0] ? (ranking[0] = "🥇 " + ranking[0]) : "";
-  ranking[1] ? (ranking[1] = "🥈 " + ranking[1]) : "";
-  ranking[2] ? (ranking[2] = "🥉 " + ranking[2]) : "";
-
-  message.channel.send(
-    `🏆 Hall of fame\n------------------------------------\n${ranking.join(
-      "\n"
-    )}`
-  );
-}
-
-export async function getDetailedRanking(
-  message: OmitPartialGroupDMChannel<Message<boolean>>,
-  args: string[]
-) {
-  const result = await GetDetailedStudyRanking();
-
-  const ranking: string[] = Object.entries(result)
-    .sort(([, subjectsA], [, subjectsB]) => {
-      const totalPointsA = Object.values(subjectsA).reduce((a, b) => a + b, 0);
-      const totalPointsB = Object.values(subjectsB).reduce((a, b) => a + b, 0);
-      return totalPointsB - totalPointsA;
-    })
-    .map(([userId, subjects], index) => {
-      const totalPoints = Object.values(subjects).reduce((a, b) => a + b, 0);
-
-      const pointsString = `${totalPoints} puntos`;
-
-      const pointsBySubjectString = Object.entries(subjects)
-        .map(([subject, points]) => {
-          return subject !== "de forma general"
-            ? `\t\t\t▫️ ${subject}: ${points} puntos`
-            : `\t\t\t▫️ Extras: ${points} puntos`;
-        })
-        .join("\n");
-
-      console.log(subjects);
-      console.log(pointsBySubjectString);
-
-      return `${
-        index + 1
-      } - <@${userId}> (${pointsString})\n${pointsBySubjectString}`;
-    });
-
-  ranking[0] ? (ranking[0] = "🥇 " + ranking[0]) : "";
-  ranking[1] ? (ranking[1] = "🥈 " + ranking[1]) : "";
-  ranking[2] ? (ranking[2] = "🥉 " + ranking[2]) : "";
-
-  message.channel.send(
-    `🏆 Hall of fame\n------------------------------------\n${ranking.join(
-      "\n"
-    )}`
-  );
 }
 
 export async function getLastSessions(
@@ -162,4 +190,99 @@ export async function getLastSessions(
       "\n"
     )}`
   );
+}
+
+export function changeSubjectOfSession(
+  message: OmitPartialGroupDMChannel<Message<boolean>>,
+  args: string[]
+) {
+  const userId = message.author.id;
+
+  if (!args[0]) {
+    message.channel.send(
+      `No se ha especificado asignatura válida para cambiar`
+    );
+    return;
+  }
+
+  const subjectName = getSubject(args[0]);
+  if (!subjectName) {
+    message.channel.send(
+      `No se ha especificado asignatura válida para cambiar`
+    );
+    return;
+  }
+
+  try {
+    ChangeSessionSubject(userId, subjectName);
+    message.channel.send(
+      `⏲️ <@${userId}> cambió su asignatura a ${subjectName}`
+    );
+  } catch (error: any) {
+    message.channel.send(error.message);
+  }
+}
+
+export async function acceptSessionWithChallenge(
+  interaction: ButtonInteraction
+) {
+  const currentUserId = interaction.user.id;
+  const args = interaction.customId.split("@")[1];
+  const [_, userId] = args.split("/");
+
+  const activeChallenge = GetActiveChallenge(userId);
+
+  if (!activeChallenge) {
+    interaction.reply({
+      content: `<@${userId}> no tiene un reto activado`,
+      ephemeral: true,
+    });
+    return;
+  }
+
+  if (userId && userId !== currentUserId) {
+    interaction.reply({
+      content: `<@${userId}> no es tu sesión`,
+      ephemeral: true,
+    });
+    return;
+  }
+
+  StartStudySession(userId, undefined, activeChallenge);
+  interaction.update({
+    content: `⏲️ <@${userId}> comenzaste a estudiar de forma general aceptando el reto de ${formatDuration(
+      activeChallenge.time
+    )}`,
+    components: [],
+  });
+}
+
+export async function acceptSessionWithoutChallenge(
+  interaction: ButtonInteraction
+) {
+  const currentUserId = interaction.user.id;
+  const args = interaction.customId.split("@")[1];
+  const [subjectName, userId] = args.split("/");
+
+  if (!subjectName) {
+    interaction.reply({
+      content: `<@${userId}> no tiene una asignatura especificada`,
+      ephemeral: true,
+    });
+    return;
+  }
+
+  if (userId && userId !== currentUserId) {
+    interaction.reply({
+      content: `<@${userId}> no es tu sesión`,
+      ephemeral: true,
+    });
+    return;
+  }
+
+  StartStudySession(userId, subjectName);
+  interaction.update({
+    content: `⏲️ <@${userId}> comenzaste a estudiar ${subjectName} sin reto`,
+    components: [],
+  });
 }

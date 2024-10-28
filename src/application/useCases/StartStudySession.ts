@@ -1,7 +1,12 @@
 import { StudySessionData } from "../../infrastructure/models/ArchivedStudySession";
 import * as StudySessionRepository from "../../infrastructure/repositories/StudySessionRepository";
+import * as ChallengeRepository from "../../infrastructure/repositories/ChallengeRepository";
 
-export function StartStudySession(userId: string, subjectName?: string) {
+export function StartStudySession(
+  userId: string,
+  subjectName?: string,
+  activeChallenge?: Challenge
+) {
   const studySession: StudySessionData = {
     userId,
     totalTime: 0,
@@ -17,5 +22,10 @@ export function StartStudySession(userId: string, subjectName?: string) {
       `Lo siento <@${userId}> ya estás estudiando ${existentStudySession.subjectName}`
     );
 
-  StudySessionRepository.addStudySession(studySession);
+  if (activeChallenge) {
+    activeChallenge.isActive = true;
+    ChallengeRepository.setChallenge(userId, activeChallenge);
+  }
+  
+  StudySessionRepository.addStudySession(studySession, activeChallenge);
 }

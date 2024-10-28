@@ -1,23 +1,19 @@
 import { Message, OmitPartialGroupDMChannel } from "discord.js";
 import { BotActionRouter } from "./types/BotAction";
 import {
+  changeSubjectOfSession,
   finishStudySession,
-  getDetailedRanking,
   getLastSessions,
-  getRanking,
   startGeneralStudySession,
   startStudySession,
 } from "./controllers/StudySessionController";
+import {
+  getDetailedRanking,
+  getRanking,
+} from "./controllers/RankingController";
 import { sendHelp } from "./controllers/HelpController";
-
-export type Command =
-  | "!ranking"
-  | "!estudiar"
-  | "!terminar"
-  | "!sesiones"
-  | "!estudio_general"
-  | "!help"
-  | "!ranking_detallado";
+import { createCustomChallenge } from "./controllers/ChallengeController";
+import { Command } from "./types/Command";
 
 const actions: BotActionRouter = {
   "!ranking": getRanking,
@@ -27,6 +23,8 @@ const actions: BotActionRouter = {
   "!sesiones": getLastSessions,
   "!estudio_general": startGeneralStudySession,
   "!help": sendHelp,
+  "!cambiar_asignatura": changeSubjectOfSession,
+  "!reto_personalizado": createCustomChallenge,
 };
 
 export function manage(message: OmitPartialGroupDMChannel<Message<boolean>>) {

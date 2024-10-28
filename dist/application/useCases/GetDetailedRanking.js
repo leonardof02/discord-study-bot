@@ -32,12 +32,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GetStudyRankingByUser = GetStudyRankingByUser;
+exports.GetDetailedStudyRanking = GetDetailedStudyRanking;
 const ArchivedSessionsRepository = __importStar(require("../../infrastructure/repositories/ArchivedSessionsRepository"));
-function GetStudyRankingByUser() {
+function GetDetailedStudyRanking() {
     return __awaiter(this, void 0, void 0, function* () {
-        const result = yield ArchivedSessionsRepository.getPointsSumsPerUser();
+        const result = yield ArchivedSessionsRepository.getPointsSumsPerUserWithSubject();
         return result;
     });
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiR2V0U3R1ZHlSYW5raW5nLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL2FwcGxpY2F0aW9uL3VzZUNhc2VzL0dldFN0dWR5UmFua2luZy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBRUEsc0RBR0M7QUFMRCx5SEFBMkc7QUFFM0csU0FBc0IscUJBQXFCOztRQUN6QyxNQUFNLE1BQU0sR0FBRyxNQUFNLDBCQUEwQixDQUFDLG9CQUFvQixFQUFFLENBQUM7UUFDdkUsT0FBTyxNQUFNLENBQUM7SUFDaEIsQ0FBQztDQUFBIn0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiR2V0RGV0YWlsZWRSYW5raW5nLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL2FwcGxpY2F0aW9uL3VzZUNhc2VzL0dldERldGFpbGVkUmFua2luZy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBRUEsMERBSUM7QUFORCx5SEFBMkc7QUFFM0csU0FBc0IsdUJBQXVCOztRQUMzQyxNQUFNLE1BQU0sR0FDVixNQUFNLDBCQUEwQixDQUFDLCtCQUErQixFQUFFLENBQUM7UUFDckUsT0FBTyxNQUFNLENBQUM7SUFDaEIsQ0FBQztDQUFBIn0=

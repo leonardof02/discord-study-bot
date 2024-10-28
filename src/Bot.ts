@@ -1,7 +1,8 @@
 import { Client, GatewayIntentBits } from "discord.js";
 import { configDotenv } from "dotenv";
-import { manage } from "./presentation/CommandManage";
+import { manage as manageCommand } from "./presentation/CommandManager";
 import { syncDatabase } from "./infrastructure/DbConnection";
+import { manageInteraction } from "./presentation/InteractionManager";
 
 configDotenv();
 
@@ -19,9 +20,14 @@ const client = new Client({
   ],
 });
 
-client.on("messageCreate", (message) => {
+client.on("messageCreate", async (message) => {
   if (message.author.bot) return;
-  manage(message);
+  manageCommand(message);
+});
+
+client.on("interactionCreate", async (interaction) => {
+  if (!interaction.isButton()) return;
+  manageInteraction(interaction);
 });
 
 syncDatabase();

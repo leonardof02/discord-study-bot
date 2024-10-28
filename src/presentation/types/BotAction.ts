@@ -1,5 +1,5 @@
 import { Message, OmitPartialGroupDMChannel } from "discord.js";
-import { Command } from "../CommandManage";
+import { Command } from "./Command";
 
 export type BotActionRouter = Record<
   Command,

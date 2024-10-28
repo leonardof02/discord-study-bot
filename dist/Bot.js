@@ -1,9 +1,19 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const dotenv_1 = require("dotenv");
-const CommandManage_1 = require("./presentation/CommandManage");
+const CommandManager_1 = require("./presentation/CommandManager");
 const DbConnection_1 = require("./infrastructure/DbConnection");
+const InteractionManager_1 = require("./presentation/InteractionManager");
 (0, dotenv_1.configDotenv)();
 const client = new discord_js_1.Client({
     intents: [
@@ -18,15 +28,20 @@ const client = new discord_js_1.Client({
         discord_js_1.GatewayIntentBits.DirectMessageTyping,
     ],
 });
-client.on("messageCreate", (message) => {
+client.on("messageCreate", (message) => __awaiter(void 0, void 0, void 0, function* () {
     if (message.author.bot)
         return;
-    (0, CommandManage_1.manage)(message);
-});
+    (0, CommandManager_1.manage)(message);
+}));
+client.on("interactionCreate", (interaction) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!interaction.isButton())
+        return;
+    (0, InteractionManager_1.manageInteraction)(interaction);
+}));
 (0, DbConnection_1.syncDatabase)();
 const token = process.env.DISCORD_TOKEN;
 client.login(token);
 client.on("ready", () => {
     console.log("El bot está skibidi toilet! 🗣️🚽");
 });
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQm90LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vc3JjL0JvdC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztBQUFBLDJDQUF1RDtBQUN2RCxtQ0FBc0M7QUFDdEMsZ0VBQXNEO0FBQ3RELGdFQUE2RDtBQUU3RCxJQUFBLHFCQUFZLEdBQUUsQ0FBQztBQUVmLE1BQU0sTUFBTSxHQUFHLElBQUksbUJBQU0sQ0FBQztJQUN4QixPQUFPLEVBQUU7UUFDUCw4QkFBaUIsQ0FBQyxjQUFjO1FBQ2hDLDhCQUFpQixDQUFDLE1BQU07UUFDeEIsOEJBQWlCLENBQUMsYUFBYTtRQUMvQiw4QkFBaUIsQ0FBQyxjQUFjO1FBQ2hDLDhCQUFpQixDQUFDLHFCQUFxQjtRQUN2Qyw4QkFBaUIsQ0FBQyxZQUFZO1FBQzlCLDhCQUFpQixDQUFDLGtCQUFrQjtRQUNwQyw4QkFBaUIsQ0FBQyxzQkFBc0I7UUFDeEMsOEJBQWlCLENBQUMsbUJBQW1CO0tBQ3RDO0NBQ0YsQ0FBQyxDQUFDO0FBRUgsTUFBTSxDQUFDLEVBQUUsQ0FBQyxlQUFlLEVBQUUsQ0FBQyxPQUFPLEVBQUUsRUFBRTtJQUNyQyxJQUFJLE9BQU8sQ0FBQyxNQUFNLENBQUMsR0FBRztRQUFFLE9BQU87SUFDL0IsSUFBQSxzQkFBTSxFQUFDLE9BQU8sQ0FBQyxDQUFDO0FBQ2xCLENBQUMsQ0FBQyxDQUFDO0FBRUgsSUFBQSwyQkFBWSxHQUFFLENBQUM7QUFDZixNQUFNLEtBQUssR0FBRyxPQUFPLENBQUMsR0FBRyxDQUFDLGFBQWEsQ0FBQztBQUN4QyxNQUFNLENBQUMsS0FBSyxDQUFDLEtBQUssQ0FBQyxDQUFDO0FBQ3BCLE1BQU0sQ0FBQyxFQUFFLENBQUMsT0FBTyxFQUFFLEdBQUcsRUFBRTtJQUN0QixPQUFPLENBQUMsR0FBRyxDQUFDLG1DQUFtQyxDQUFDLENBQUM7QUFDbkQsQ0FBQyxDQUFDLENBQUMifQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQm90LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vc3JjL0JvdC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7OztBQUFBLDJDQUF1RDtBQUN2RCxtQ0FBc0M7QUFDdEMsa0VBQXdFO0FBQ3hFLGdFQUE2RDtBQUM3RCwwRUFBc0U7QUFFdEUsSUFBQSxxQkFBWSxHQUFFLENBQUM7QUFFZixNQUFNLE1BQU0sR0FBRyxJQUFJLG1CQUFNLENBQUM7SUFDeEIsT0FBTyxFQUFFO1FBQ1AsOEJBQWlCLENBQUMsY0FBYztRQUNoQyw4QkFBaUIsQ0FBQyxNQUFNO1FBQ3hCLDhCQUFpQixDQUFDLGFBQWE7UUFDL0IsOEJBQWlCLENBQUMsY0FBYztRQUNoQyw4QkFBaUIsQ0FBQyxxQkFBcUI7UUFDdkMsOEJBQWlCLENBQUMsWUFBWTtRQUM5Qiw4QkFBaUIsQ0FBQyxrQkFBa0I7UUFDcEMsOEJBQWlCLENBQUMsc0JBQXNCO1FBQ3hDLDhCQUFpQixDQUFDLG1CQUFtQjtLQUN0QztDQUNGLENBQUMsQ0FBQztBQUVILE1BQU0sQ0FBQyxFQUFFLENBQUMsZUFBZSxFQUFFLENBQU8sT0FBTyxFQUFFLEVBQUU7SUFDM0MsSUFBSSxPQUFPLENBQUMsTUFBTSxDQUFDLEdBQUc7UUFBRSxPQUFPO0lBQy9CLElBQUEsdUJBQWEsRUFBQyxPQUFPLENBQUMsQ0FBQztBQUN6QixDQUFDLENBQUEsQ0FBQyxDQUFDO0FBRUgsTUFBTSxDQUFDLEVBQUUsQ0FBQyxtQkFBbUIsRUFBRSxDQUFPLFdBQVcsRUFBRSxFQUFFO0lBQ25ELElBQUksQ0FBQyxXQUFXLENBQUMsUUFBUSxFQUFFO1FBQUUsT0FBTztJQUNwQyxJQUFBLHNDQUFpQixFQUFDLFdBQVcsQ0FBQyxDQUFDO0FBQ2pDLENBQUMsQ0FBQSxDQUFDLENBQUM7QUFFSCxJQUFBLDJCQUFZLEdBQUUsQ0FBQztBQUNmLE1BQU0sS0FBSyxHQUFHLE9BQU8sQ0FBQyxHQUFHLENBQUMsYUFBYSxDQUFDO0FBQ3hDLE1BQU0sQ0FBQyxLQUFLLENBQUMsS0FBSyxDQUFDLENBQUM7QUFDcEIsTUFBTSxDQUFDLEVBQUUsQ0FBQyxPQUFPLEVBQUUsR0FBRyxFQUFFO0lBQ3RCLE9BQU8sQ0FBQyxHQUFHLENBQUMsbUNBQW1DLENBQUMsQ0FBQztBQUNuRCxDQUFDLENBQUMsQ0FBQyJ9
