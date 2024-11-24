@@ -48,3 +48,8 @@ export function formatDuration(timestamp: number): string {
 
   return parts.join(" ") || "0s";
 }
+
+export function generateSecondsBetween(start: number, end: number): number {
+  const randomNumber = Math.floor(Math.random() * (end - start + 1) + start);
+  return randomNumber;
+}

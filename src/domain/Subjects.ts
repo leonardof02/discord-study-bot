@@ -1,6 +1,5 @@
 export const Subjects = [
   "Historia de España",
-  "Historia de la Filosofía",
   "Economía",
   "Lengua Castellana y Literatura",
   "Inglés",
@@ -13,4 +12,5 @@ export const Subjects = [
   "Química",
   "Física",
   "Latín",
+  "Filosofía",
 ];

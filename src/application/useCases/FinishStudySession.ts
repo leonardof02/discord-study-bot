@@ -16,31 +16,48 @@ export async function FinishStudySession(
   }
 
   const totalTime = Date.now() - existentStudySession.startTime;
+  const points = calculatePoints(
+    existentStudySession.startTime,
+    existentStudySession.challenge
+  );
+  const challengeCompleted = isChallengeCompleted(
+    existentStudySession.startTime,
+    existentStudySession.challenge
+  );
   const finishedStudySessionData: StudySessionData = {
     totalTime,
     subjectName: existentStudySession.subjectName,
     startTime: existentStudySession.startTime,
-    points: calculatePoints(
-      existentStudySession.startTime,
-      existentStudySession.challenge
-    ),
+    points,
+    challengeCompleted,
     humanReadableTotalTime: msToTime(totalTime),
     challenge: existentStudySession.challenge,
     userId,
   };
 
+  if (challengeCompleted) {
+    ChallengeRepository.removeChallenge(userId);
+  }
   const sessionId = await ArchivedSessionsRepository.archiveStudySession(
     finishedStudySessionData
   );
   StudySessionRepository.removeStudySession(userId);
-  ChallengeRepository.removeChallenge(userId);
   return { ...finishedStudySessionData, id: sessionId };
+}
+
+function isChallengeCompleted(startTime: number, challenge?: Challenge) {
+  if (!challenge) return false;
+  return Date.now() - startTime > challenge?.time * 1000;
 }
 
 function calculatePoints(startTime: number, challenge?: Challenge) {
   const passedTime = Date.now() - startTime;
-  if (challenge && passedTime < challenge?.time * 1000) return 0;
   const pointsGained = Math.round((passedTime / (1000 * 60)) * 100) / 100;
+
+  if (!isChallengeCompleted(startTime, challenge)) return pointsGained;
+
   const challengePoints = challenge?.isActive ? pointsGained * 0.1 : 0;
-  return Number.parseFloat((challengePoints + pointsGained).toFixed(2));
+  return challenge?.isRandom
+    ? Number.parseFloat((pointsGained * 2).toFixed(2))
+    : Number.parseFloat((pointsGained + challengePoints).toFixed(2));
 }

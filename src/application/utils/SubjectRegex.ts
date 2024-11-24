@@ -22,8 +22,12 @@ function createPartialMatchRegex(subject: string): RegExp {
   return new RegExp(regexString, "i");
 }
 
-export function getSubject(subjectName: string) {
+export function getSubject(subjectName?: string) {
+  if (!subjectName) return null;
+
+  // aliases
   if (subjectName == "mates") return "Matemáticas";
+
   const regex = createPartialMatchRegex(subjectName);
   const matchedSubjects = Subjects.filter((subject) => regex.test(subject));
   return matchedSubjects[0];

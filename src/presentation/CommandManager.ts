@@ -12,7 +12,11 @@ import {
   getRanking,
 } from "./controllers/RankingController";
 import { sendHelp } from "./controllers/HelpController";
-import { createCustomChallenge } from "./controllers/ChallengeController";
+import {
+  createCustomChallenge,
+  createRandomChallenge,
+  deleteChallenge,
+} from "./controllers/ChallengeController";
 import { Command } from "./types/Command";
 import { getUserInfo } from "./controllers/UserInfoController";
 
@@ -26,7 +30,9 @@ const actions: BotActionRouter = {
   "!help": sendHelp,
   "!cambiar_asignatura": changeSubjectOfSession,
   "!reto_personalizado": createCustomChallenge,
+  "!reto": createRandomChallenge,
   "!info": getUserInfo,
+  "!borrar_reto": deleteChallenge,
 };
 
 export function manage(message: OmitPartialGroupDMChannel<Message<boolean>>) {

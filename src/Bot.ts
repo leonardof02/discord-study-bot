@@ -26,7 +26,7 @@ client.on("messageCreate", async (message) => {
 });
 
 client.on("interactionCreate", async (interaction) => {
-  if (!interaction.isButton()) return;
+  if (!interaction.isButton() && !interaction.isModalSubmit()) return;
   manageInteraction(interaction);
 });
 

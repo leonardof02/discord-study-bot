@@ -15,13 +15,23 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -44,27 +54,39 @@ function FinishStudySession(userId) {
             throw new Error(`<@${userId}> no has iniciado ninguna sesión de estudio`);
         }
         const totalTime = Date.now() - existentStudySession.startTime;
+        const points = calculatePoints(existentStudySession.startTime, existentStudySession.challenge);
+        const challengeCompleted = isChallengeCompleted(existentStudySession.startTime, existentStudySession.challenge);
         const finishedStudySessionData = {
             totalTime,
             subjectName: existentStudySession.subjectName,
             startTime: existentStudySession.startTime,
-            points: calculatePoints(existentStudySession.startTime, existentStudySession.challenge),
+            points,
+            challengeCompleted,
             humanReadableTotalTime: (0, TimeUtils_1.msToTime)(totalTime),
             challenge: existentStudySession.challenge,
             userId,
         };
+        if (challengeCompleted) {
+            ChallengeRepository.removeChallenge(userId);
+        }
         const sessionId = yield ArchivedSessionsRepository.archiveStudySession(finishedStudySessionData);
         StudySessionRepository.removeStudySession(userId);
-        ChallengeRepository.removeChallenge(userId);
         return Object.assign(Object.assign({}, finishedStudySessionData), { id: sessionId });
     });
 }
+function isChallengeCompleted(startTime, challenge) {
+    if (!challenge)
+        return false;
+    return Date.now() - startTime > (challenge === null || challenge === void 0 ? void 0 : challenge.time) * 1000;
+}
 function calculatePoints(startTime, challenge) {
     const passedTime = Date.now() - startTime;
-    if (challenge && passedTime < (challenge === null || challenge === void 0 ? void 0 : challenge.time) * 1000)
-        return 0;
     const pointsGained = Math.round((passedTime / (1000 * 60)) * 100) / 100;
+    if (!isChallengeCompleted(startTime, challenge))
+        return pointsGained;
     const challengePoints = (challenge === null || challenge === void 0 ? void 0 : challenge.isActive) ? pointsGained * 0.1 : 0;
-    return Number.parseFloat((challengePoints + pointsGained).toFixed(2));
+    return (challenge === null || challenge === void 0 ? void 0 : challenge.isRandom)
+        ? Number.parseFloat((pointsGained * 2).toFixed(2))
+        : Number.parseFloat((pointsGained + challengePoints).toFixed(2));
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiRmluaXNoU3R1ZHlTZXNzaW9uLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL2FwcGxpY2F0aW9uL3VzZUNhc2VzL0ZpbmlzaFN0dWR5U2Vzc2lvbi50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBUUEsZ0RBNkJDO0FBbkNELGlIQUFtRztBQUNuRyx5SEFBMkc7QUFDM0csMkdBQTZGO0FBRTdGLGtEQUE4QztBQUU5QyxTQUFzQixrQkFBa0IsQ0FDdEMsTUFBYzs7UUFFZCxNQUFNLG9CQUFvQixHQUFHLHNCQUFzQixDQUFDLGVBQWUsQ0FBQyxNQUFNLENBQUMsQ0FBQztRQUU1RSxJQUFJLENBQUMsb0JBQW9CLEVBQUUsQ0FBQztZQUMxQixNQUFNLElBQUksS0FBSyxDQUFDLEtBQUssTUFBTSw2Q0FBNkMsQ0FBQyxDQUFDO1FBQzVFLENBQUM7UUFFRCxNQUFNLFNBQVMsR0FBRyxJQUFJLENBQUMsR0FBRyxFQUFFLEdBQUcsb0JBQW9CLENBQUMsU0FBUyxDQUFDO1FBQzlELE1BQU0sd0JBQXdCLEdBQXFCO1lBQ2pELFNBQVM7WUFDVCxXQUFXLEVBQUUsb0JBQW9CLENBQUMsV0FBVztZQUM3QyxTQUFTLEVBQUUsb0JBQW9CLENBQUMsU0FBUztZQUN6QyxNQUFNLEVBQUUsZUFBZSxDQUNyQixvQkFBb0IsQ0FBQyxTQUFTLEVBQzlCLG9CQUFvQixDQUFDLFNBQVMsQ0FDL0I7WUFDRCxzQkFBc0IsRUFBRSxJQUFBLG9CQUFRLEVBQUMsU0FBUyxDQUFDO1lBQzNDLFNBQVMsRUFBRSxvQkFBb0IsQ0FBQyxTQUFTO1lBQ3pDLE1BQU07U0FDUCxDQUFDO1FBRUYsTUFBTSxTQUFTLEdBQUcsTUFBTSwwQkFBMEIsQ0FBQyxtQkFBbUIsQ0FDcEUsd0JBQXdCLENBQ3pCLENBQUM7UUFDRixzQkFBc0IsQ0FBQyxrQkFBa0IsQ0FBQyxNQUFNLENBQUMsQ0FBQztRQUNsRCxtQkFBbUIsQ0FBQyxlQUFlLENBQUMsTUFBTSxDQUFDLENBQUM7UUFDNUMsdUNBQVksd0JBQXdCLEtBQUUsRUFBRSxFQUFFLFNBQVMsSUFBRztJQUN4RCxDQUFDO0NBQUE7QUFFRCxTQUFTLGVBQWUsQ0FBQyxTQUFpQixFQUFFLFNBQXFCO0lBQy9ELE1BQU0sVUFBVSxHQUFHLElBQUksQ0FBQyxHQUFHLEVBQUUsR0FBRyxTQUFTLENBQUM7SUFDMUMsSUFBSSxTQUFTLElBQUksVUFBVSxHQUFHLENBQUEsU0FBUyxhQUFULFNBQVMsdUJBQVQsU0FBUyxDQUFFLElBQUksSUFBRyxJQUFJO1FBQUUsT0FBTyxDQUFDLENBQUM7SUFDL0QsTUFBTSxZQUFZLEdBQUcsSUFBSSxDQUFDLEtBQUssQ0FBQyxDQUFDLFVBQVUsR0FBRyxDQUFDLElBQUksR0FBRyxFQUFFLENBQUMsQ0FBQyxHQUFHLEdBQUcsQ0FBQyxHQUFHLEdBQUcsQ0FBQztJQUN4RSxNQUFNLGVBQWUsR0FBRyxDQUFBLFNBQVMsYUFBVCxTQUFTLHVCQUFULFNBQVMsQ0FBRSxRQUFRLEVBQUMsQ0FBQyxDQUFDLFlBQVksR0FBRyxHQUFHLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQztJQUNyRSxPQUFPLE1BQU0sQ0FBQyxVQUFVLENBQUMsQ0FBQyxlQUFlLEdBQUcsWUFBWSxDQUFDLENBQUMsT0FBTyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUM7QUFDeEUsQ0FBQyJ9
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiRmluaXNoU3R1ZHlTZXNzaW9uLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL2FwcGxpY2F0aW9uL3VzZUNhc2VzL0ZpbmlzaFN0dWR5U2Vzc2lvbi50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQVFBLGdEQXFDQztBQTNDRCxpSEFBbUc7QUFDbkcseUhBQTJHO0FBQzNHLDJHQUE2RjtBQUU3RixrREFBOEM7QUFFOUMsU0FBc0Isa0JBQWtCLENBQ3RDLE1BQWM7O1FBRWQsTUFBTSxvQkFBb0IsR0FBRyxzQkFBc0IsQ0FBQyxlQUFlLENBQUMsTUFBTSxDQUFDLENBQUM7UUFFNUUsSUFBSSxDQUFDLG9CQUFvQixFQUFFLENBQUM7WUFDMUIsTUFBTSxJQUFJLEtBQUssQ0FBQyxLQUFLLE1BQU0sNkNBQTZDLENBQUMsQ0FBQztRQUM1RSxDQUFDO1FBRUQsTUFBTSxTQUFTLEdBQUcsSUFBSSxDQUFDLEdBQUcsRUFBRSxHQUFHLG9CQUFvQixDQUFDLFNBQVMsQ0FBQztRQUM5RCxNQUFNLE1BQU0sR0FBRyxlQUFlLENBQzVCLG9CQUFvQixDQUFDLFNBQVMsRUFDOUIsb0JBQW9CLENBQUMsU0FBUyxDQUMvQixDQUFDO1FBQ0YsTUFBTSxrQkFBa0IsR0FBRyxvQkFBb0IsQ0FDN0Msb0JBQW9CLENBQUMsU0FBUyxFQUM5QixvQkFBb0IsQ0FBQyxTQUFTLENBQy9CLENBQUM7UUFDRixNQUFNLHdCQUF3QixHQUFxQjtZQUNqRCxTQUFTO1lBQ1QsV0FBVyxFQUFFLG9CQUFvQixDQUFDLFdBQVc7WUFDN0MsU0FBUyxFQUFFLG9CQUFvQixDQUFDLFNBQVM7WUFDekMsTUFBTTtZQUNOLGtCQUFrQjtZQUNsQixzQkFBc0IsRUFBRSxJQUFBLG9CQUFRLEVBQUMsU0FBUyxDQUFDO1lBQzNDLFNBQVMsRUFBRSxvQkFBb0IsQ0FBQyxTQUFTO1lBQ3pDLE1BQU07U0FDUCxDQUFDO1FBRUYsSUFBSSxrQkFBa0IsRUFBRSxDQUFDO1lBQ3ZCLG1CQUFtQixDQUFDLGVBQWUsQ0FBQyxNQUFNLENBQUMsQ0FBQztRQUM5QyxDQUFDO1FBQ0QsTUFBTSxTQUFTLEdBQUcsTUFBTSwwQkFBMEIsQ0FBQyxtQkFBbUIsQ0FDcEUsd0JBQXdCLENBQ3pCLENBQUM7UUFDRixzQkFBc0IsQ0FBQyxrQkFBa0IsQ0FBQyxNQUFNLENBQUMsQ0FBQztRQUNsRCx1Q0FBWSx3QkFBd0IsS0FBRSxFQUFFLEVBQUUsU0FBUyxJQUFHO0lBQ3hELENBQUM7Q0FBQTtBQUVELFNBQVMsb0JBQW9CLENBQUMsU0FBaUIsRUFBRSxTQUFxQjtJQUNwRSxJQUFJLENBQUMsU0FBUztRQUFFLE9BQU8sS0FBSyxDQUFDO0lBQzdCLE9BQU8sSUFBSSxDQUFDLEdBQUcsRUFBRSxHQUFHLFNBQVMsR0FBRyxDQUFBLFNBQVMsYUFBVCxTQUFTLHVCQUFULFNBQVMsQ0FBRSxJQUFJLElBQUcsSUFBSSxDQUFDO0FBQ3pELENBQUM7QUFFRCxTQUFTLGVBQWUsQ0FBQyxTQUFpQixFQUFFLFNBQXFCO0lBQy9ELE1BQU0sVUFBVSxHQUFHLElBQUksQ0FBQyxHQUFHLEVBQUUsR0FBRyxTQUFTLENBQUM7SUFDMUMsTUFBTSxZQUFZLEdBQUcsSUFBSSxDQUFDLEtBQUssQ0FBQyxDQUFDLFVBQVUsR0FBRyxDQUFDLElBQUksR0FBRyxFQUFFLENBQUMsQ0FBQyxHQUFHLEdBQUcsQ0FBQyxHQUFHLEdBQUcsQ0FBQztJQUV4RSxJQUFJLENBQUMsb0JBQW9CLENBQUMsU0FBUyxFQUFFLFNBQVMsQ0FBQztRQUFFLE9BQU8sWUFBWSxDQUFDO0lBRXJFLE1BQU0sZUFBZSxHQUFHLENBQUEsU0FBUyxhQUFULFNBQVMsdUJBQVQsU0FBUyxDQUFFLFFBQVEsRUFBQyxDQUFDLENBQUMsWUFBWSxHQUFHLEdBQUcsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDO0lBQ3JFLE9BQU8sQ0FBQSxTQUFTLGFBQVQsU0FBUyx1QkFBVCxTQUFTLENBQUUsUUFBUTtRQUN4QixDQUFDLENBQUMsTUFBTSxDQUFDLFVBQVUsQ0FBQyxDQUFDLFlBQVksR0FBRyxDQUFDLENBQUMsQ0FBQyxPQUFPLENBQUMsQ0FBQyxDQUFDLENBQUM7UUFDbEQsQ0FBQyxDQUFDLE1BQU0sQ0FBQyxVQUFVLENBQUMsQ0FBQyxZQUFZLEdBQUcsZUFBZSxDQUFDLENBQUMsT0FBTyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUM7QUFDckUsQ0FBQyJ9

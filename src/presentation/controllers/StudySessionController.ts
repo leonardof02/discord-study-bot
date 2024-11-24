@@ -23,8 +23,7 @@ export async function startStudySession(
   args: string[]
 ) {
   const userId = message.author.id;
-
-  const subjectName = getSubject(args.join(" "));
+  const subjectName = getSubject(args[0].split("\n")[0]);
 
   if (args[0] == null || subjectName == null) {
     message.channel.send(
@@ -32,13 +31,18 @@ export async function startStudySession(
     );
     return;
   }
+  const [_, ...endLineSplit] = args.join(" ").split("\n");
+  const description = endLineSplit.join("\n") ?? args.slice(1).join(" ") ?? "";
 
   try {
     const activeChallenge = GetActiveChallenge(userId);
+
     if (!activeChallenge) {
       StartStudySession(userId, subjectName);
       message.channel.send(
-        `⏲️ <@${userId}> comenzaste a estudiar ${subjectName}`
+        `⏲️ <@${userId}> comenzaste a estudiar ${subjectName} ${
+          description ? `\n📝 Descripción: ${description}` : ""
+        }`
       );
       return;
     }
@@ -52,14 +56,14 @@ export async function startStudySession(
 
     const confirmButton = new ButtonBuilder()
       .setCustomId(
-        `${ButtonActions.StartStudySessionWithChallenge}@${subjectName}/${userId}`
+        `${ButtonActions.StartStudySessionWithChallenge}@${subjectName}/${userId}/${description}`
       )
       .setLabel("SI")
       .setStyle(ButtonStyle.Success);
 
     const cancelButton = new ButtonBuilder()
       .setCustomId(
-        `${ButtonActions.StartStudySessionWithoutChallenge}@${subjectName}`
+        `${ButtonActions.StartStudySessionWithoutChallenge}@${subjectName}/${userId}/$${description}`
       )
       .setLabel("NO")
       .setStyle(ButtonStyle.Danger);
@@ -85,6 +89,10 @@ export async function startGeneralStudySession(
   args: string[]
 ) {
   const userId = message.author.id;
+  const descriptionSlice = message.content.split(" ").slice(1).join(" ");
+  const description = descriptionSlice ?? "";
+
+  console.log("DESCRIPCCCION:!!!!! ", description);
 
   try {
     const activeChallenge = GetActiveChallenge(userId);
@@ -92,7 +100,9 @@ export async function startGeneralStudySession(
     if (!activeChallenge) {
       StartStudySession(userId);
       message.channel.send(
-        `⏲️ <@${userId}> comenzaste a estudiar de forma general`
+        `⏲️ <@${userId}> comenzaste a estudiar de forma general ${
+          description ? `\n📝 Descripción: ${description}` : ""
+        }`
       );
       return;
     }
@@ -106,14 +116,14 @@ export async function startGeneralStudySession(
 
     const confirmButton = new ButtonBuilder()
       .setCustomId(
-        `${ButtonActions.StartStudySessionWithChallenge}@de forma general/${userId}`
+        `${ButtonActions.StartStudySessionWithChallenge}@de forma general/${userId}//${description}`
       )
       .setLabel("SI")
       .setStyle(ButtonStyle.Success);
 
     const cancelButton = new ButtonBuilder()
       .setCustomId(
-        `${ButtonActions.StartStudySessionWithoutChallenge}@de forma general`
+        `${ButtonActions.StartStudySessionWithoutChallenge}@de forma general//${description}`
       )
       .setLabel("NO")
       .setStyle(ButtonStyle.Danger);
@@ -142,7 +152,7 @@ export async function finishStudySession(
   try {
     const finishedStudySessionData = await FinishStudySession(userId);
 
-    message.channel.send(
+    const challengeText = message.channel.send(
       `Terminada sesión de estudio de <@${userId}>${
         finishedStudySessionData.subjectName === "de forma general"
           ? ""
@@ -150,13 +160,10 @@ export async function finishStudySession(
       }
   🕑 Tiempo Total: ${finishedStudySessionData.humanReadableTotalTime}
   💯 Puntuación obtenida: ${finishedStudySessionData.points}${
-        finishedStudySessionData.challenge &&
-        finishedStudySessionData.points > 0
-          ? "\n✅ Reto completado con éxito\n➕ Puntos extra ganados"
-          : ""
-      }${
-        finishedStudySessionData.points === 0
-          ? "\n❌ No has completado el reto\n➖ Has perdido todos los puntos"
+        finishedStudySessionData.challenge != null
+          ? finishedStudySessionData.challengeCompleted
+            ? "\n✅ Reto completado con éxito\n➕ Puntos extra ganados"
+            : "\n❌ No has completado el reto\n➖ Has perdido todos los puntos del reto"
           : ""
       }
   🔑 ID SESIÓN: ${finishedStudySessionData.id}`
@@ -228,7 +235,7 @@ export async function acceptSessionWithChallenge(
 ) {
   const currentUserId = interaction.user.id;
   const args = interaction.customId.split("@")[1];
-  const [_, userId] = args.split("/");
+  const [subjectName, userId, description] = args.split("/");
 
   const activeChallenge = GetActiveChallenge(userId);
 
@@ -248,11 +255,11 @@ export async function acceptSessionWithChallenge(
     return;
   }
 
-  StartStudySession(userId, undefined, activeChallenge);
+  StartStudySession(userId, subjectName, activeChallenge);
   interaction.update({
-    content: `⏲️ <@${userId}> comenzaste a estudiar de forma general aceptando el reto de ${formatDuration(
+    content: `⏲️ <@${userId}> comenzaste a estudiar ${subjectName} aceptando el reto de ${formatDuration(
       activeChallenge.time
-    )}`,
+    )}\n📝 Descripción: ${description}`,
     components: [],
   });
 }
@@ -262,7 +269,7 @@ export async function acceptSessionWithoutChallenge(
 ) {
   const currentUserId = interaction.user.id;
   const args = interaction.customId.split("@")[1];
-  const [subjectName, userId] = args.split("/");
+  const [subjectName, userId, description] = args.split("/");
 
   if (!subjectName) {
     interaction.reply({
@@ -280,9 +287,18 @@ export async function acceptSessionWithoutChallenge(
     return;
   }
 
-  StartStudySession(userId, subjectName);
+  try {
+    StartStudySession(userId, subjectName);
+  } catch (error: any) {
+    interaction.reply({
+      content: error.message,
+      ephemeral: true,
+    });
+    return;
+  }
+
   interaction.update({
-    content: `⏲️ <@${userId}> comenzaste a estudiar ${subjectName} sin reto`,
+    content: `⏲️ <@${userId}> comenzaste a estudiar ${subjectName} sin reto \n📝 Descripción: ${description}`,
     components: [],
   });
 }

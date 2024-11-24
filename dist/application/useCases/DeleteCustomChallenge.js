@@ -15,21 +15,31 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DeleteCustomChallenge = DeleteCustomChallenge;
+exports.DeleteChallenge = DeleteChallenge;
 const ChallengeRepository = __importStar(require("../../infrastructure/repositories/ChallengeRepository"));
-function DeleteCustomChallenge(userId) {
+function DeleteChallenge(userId) {
     const existentChallenge = ChallengeRepository.getChallenge(userId);
     if (!existentChallenge)
         throw new Error(`<@${userId}> no tiene un reto creado`);
     ChallengeRepository.removeChallenge(userId);
     return;
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiRGVsZXRlQ3VzdG9tQ2hhbGxlbmdlLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL2FwcGxpY2F0aW9uL3VzZUNhc2VzL0RlbGV0ZUN1c3RvbUNoYWxsZW5nZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBRUEsc0RBTUM7QUFSRCwyR0FBNkY7QUFFN0YsU0FBZ0IscUJBQXFCLENBQUMsTUFBYztJQUNsRCxNQUFNLGlCQUFpQixHQUFHLG1CQUFtQixDQUFDLFlBQVksQ0FBQyxNQUFNLENBQUMsQ0FBQztJQUNuRSxJQUFJLENBQUMsaUJBQWlCO1FBQ3BCLE1BQU0sSUFBSSxLQUFLLENBQUMsS0FBSyxNQUFNLDJCQUEyQixDQUFDLENBQUM7SUFDMUQsbUJBQW1CLENBQUMsZUFBZSxDQUFDLE1BQU0sQ0FBQyxDQUFDO0lBQzVDLE9BQU87QUFDVCxDQUFDIn0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiRGVsZXRlQ3VzdG9tQ2hhbGxlbmdlLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL2FwcGxpY2F0aW9uL3VzZUNhc2VzL0RlbGV0ZUN1c3RvbUNoYWxsZW5nZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUVBLDBDQU1DO0FBUkQsMkdBQTZGO0FBRTdGLFNBQWdCLGVBQWUsQ0FBQyxNQUFjO0lBQzVDLE1BQU0saUJBQWlCLEdBQUcsbUJBQW1CLENBQUMsWUFBWSxDQUFDLE1BQU0sQ0FBQyxDQUFDO0lBQ25FLElBQUksQ0FBQyxpQkFBaUI7UUFDcEIsTUFBTSxJQUFJLEtBQUssQ0FBQyxLQUFLLE1BQU0sMkJBQTJCLENBQUMsQ0FBQztJQUMxRCxtQkFBbUIsQ0FBQyxlQUFlLENBQUMsTUFBTSxDQUFDLENBQUM7SUFDNUMsT0FBTztBQUNULENBQUMifQ==

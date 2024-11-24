@@ -1,23 +1,26 @@
-import { ButtonInteraction } from "discord.js";
-import { stopCustomChallenge } from "./controllers/ChallengeController";
+import { ButtonInteraction, ModalSubmitInteraction } from "discord.js";
+import { stopChallenge } from "./controllers/ChallengeController";
 import ButtonActions from "./constants/ButtonActions";
 import {
   acceptSessionWithChallenge,
   acceptSessionWithoutChallenge,
 } from "./controllers/StudySessionController";
 
-export function manageInteraction(interaction: ButtonInteraction) {
+export function manageInteraction(
+  interaction: ButtonInteraction | ModalSubmitInteraction
+) {
+  
   // Respond to dynamic commands
   const [command] = interaction.customId.split("@");
   switch (command) {
     case ButtonActions.DeleteChallenge:
-      stopCustomChallenge(interaction);
+      stopChallenge(interaction as ButtonInteraction);
       break;
     case ButtonActions.StartStudySessionWithChallenge:
-      acceptSessionWithChallenge(interaction);
+      acceptSessionWithChallenge(interaction as ButtonInteraction);
       break;
     case ButtonActions.StartStudySessionWithoutChallenge:
-      acceptSessionWithoutChallenge(interaction);
+      acceptSessionWithoutChallenge(interaction as ButtonInteraction);
       break;
     default:
       break;

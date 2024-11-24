@@ -8,4 +8,6 @@ export type Command =
   | "!ranking_detallado"
   | "!cambiar_asignatura"
   | "!reto_personalizado"
-  | "!info";
+  | "!info"
+  | "!reto"
+  | "!borrar_reto";

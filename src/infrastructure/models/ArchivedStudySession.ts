@@ -2,8 +2,6 @@ import { DataTypes, Model, Optional } from "sequelize";
 import DbConnection from "../DbConnection";
 import { StudySessionData } from "../../domain/StudySessionData";
 
-
-
 export const ArchivedStudySession = DbConnection.define<
   Model<StudySessionData, Optional<StudySessionData, "id">>
 >(
@@ -32,6 +30,10 @@ export const ArchivedStudySession = DbConnection.define<
     humanReadableTotalTime: {
       type: DataTypes.NUMBER,
     },
+    challengeCompleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   },
   {
     tableName: "studySessions",
@@ -39,4 +41,3 @@ export const ArchivedStudySession = DbConnection.define<
   }
 );
 export { StudySessionData };
-

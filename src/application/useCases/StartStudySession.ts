@@ -14,6 +14,7 @@ export function StartStudySession(
     subjectName: subjectName || "de forma general",
     points: 0,
     humanReadableTotalTime: "0:00:00",
+    challengeCompleted: false,
   };
 
   const existentStudySession = StudySessionRepository.getStudySession(userId);

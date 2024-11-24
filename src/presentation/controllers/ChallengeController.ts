@@ -8,10 +8,15 @@ import {
   EmbedBuilder,
 } from "discord.js";
 import { CreateCustomChallenge } from "../../application/useCases/CreateCustomChallenge";
-import { DeleteCustomChallenge } from "../../application/useCases/DeleteCustomChallenge";
+import { DeleteChallenge } from "../../application/useCases/DeleteChallenge";
 
-import { parseTimeStringToSeconds } from "../utils/TimeUtils";
+import {
+  formatDuration,
+  generateSecondsBetween,
+  parseTimeStringToSeconds,
+} from "../utils/TimeUtils";
 import ButtonActions from "../constants/ButtonActions";
+import { CreateRandomChallenge } from "../../application/useCases/CreateRandomChallenge";
 
 /** Crea un reto personalizado segun el tiempo indicado en el mensaje
  * @param message Mensaje enviado por el usuario
@@ -58,15 +63,62 @@ export function createCustomChallenge(
   }
 }
 
+/** Crea un reto aleatorio segun la dificultad indicada en el mensaje
+ * @param message Mensaje enviado por el usuario
+ * @param args Argumentos enviados por el usuario dificultad del reto (easy, medium, hard)
+ */
+export function createRandomChallenge(
+  message: OmitPartialGroupDMChannel<Message<boolean>>,
+  args: string[]
+) {
+  const userId = message.author.id;
+
+  if (
+    !args[0] ||
+    (args[0] !== "easy" && args[0] !== "medium" && args[0] !== "hard")
+  ) {
+    message.channel.send(
+      `Especifica la dificultad del reto aleatorio (easy, medium, hard)`
+    );
+    return;
+  }
+
+  const timeByDifficulty: Record<string, number> = {
+    easy: generateSecondsBetween(3600, 3600 * 3),
+    medium: generateSecondsBetween(3600 * 3 + 1, 3600 * 6),
+    hard: generateSecondsBetween(3600 * 6 + 1, 3600 * 9),
+  };
+
+  let timeInSeconds = timeByDifficulty[args[0]];
+
+  const button = new ButtonBuilder()
+    .setCustomId(ButtonActions.DeleteChallenge)
+    .setLabel("Eliminar reto")
+    .setStyle(ButtonStyle.Danger);
+
+  const row = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
+
+  const timeString = formatDuration(timeInSeconds);
+  try {
+    CreateRandomChallenge(userId, timeInSeconds);
+    message.channel.send({
+      content: `⏲️ <@${userId}> ha creado un reto aleatorio de ${timeString}`,
+      components: [row],
+    });
+  } catch (error: any) {
+    message.channel.send(error.message);
+  }
+}
+
 /** Elimina un reto personalizado ya creado por el usuario
  * @param interaction La interacción resultado del boton de eliminar el reto
  */
-export async function stopCustomChallenge(interaction: ButtonInteraction) {
+export async function stopChallenge(interaction: ButtonInteraction) {
   try {
     const userId = interaction.user.id;
-    DeleteCustomChallenge(userId);
+    DeleteChallenge(userId);
     interaction.update({
-      content: `⏲️ <@${userId}> ha eliminado correctamente su reto personalizado`,
+      content: `⏲️ <@${userId}> ha eliminado correctamente su reto`,
       components: [],
     });
   } catch (error: any) {
@@ -77,5 +129,21 @@ export async function stopCustomChallenge(interaction: ButtonInteraction) {
       .setFooter({ text: "Error en el bot de estudio" });
 
     await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
+  }
+}
+
+export async function deleteChallenge(
+  message: OmitPartialGroupDMChannel<Message<boolean>>,
+  args: string[]
+) {
+  const userId = message.author.id;
+
+  try {
+    DeleteChallenge(userId);
+    message.channel.send(
+      `⏲️ <@${userId}> ha eliminado correctamente su reto`
+    );
+  } catch (error: any) {
+    message.channel.send(error.message);
   }
 }
