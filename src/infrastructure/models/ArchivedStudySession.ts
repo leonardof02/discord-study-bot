@@ -1,5 +1,5 @@
-import DbConnection from "../DbConnection";
 import { DataTypes, Model, Optional } from "sequelize";
+import DbConnection from "../DbConnection";
 import { StudySessionData } from "../../domain/StudySessionData";
 
 export const ArchivedStudySession = DbConnection.define<
@@ -25,10 +25,10 @@ export const ArchivedStudySession = DbConnection.define<
       type: DataTypes.BIGINT,
     },
     points: {
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.FLOAT,
     },
     humanReadableTotalTime: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.STRING,
     },
     challengeCompleted: {
       type: DataTypes.BOOLEAN,
