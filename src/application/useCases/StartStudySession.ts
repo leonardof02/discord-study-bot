@@ -7,6 +7,7 @@ export function StartStudySession(
   subjectName?: string,
   activeChallenge?: Challenge
 ) {
+  
   const studySession: StudySessionData = {
     userId,
     totalTime: 0,
@@ -18,6 +19,7 @@ export function StartStudySession(
   };
 
   const existentStudySession = StudySessionRepository.getStudySession(userId);
+
   if (existentStudySession)
     throw new Error(
       `Lo siento <@${userId}> ya estás estudiando ${existentStudySession.subjectName}`
@@ -27,6 +29,6 @@ export function StartStudySession(
     activeChallenge.isActive = true;
     ChallengeRepository.setChallenge(userId, activeChallenge);
   }
-  
+
   StudySessionRepository.addStudySession(studySession, activeChallenge);
 }

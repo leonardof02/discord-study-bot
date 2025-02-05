@@ -40,7 +40,7 @@ export async function getDetailedRanking(
     .map(([userId, subjects], index) => {
       const totalPoints = Object.values(subjects).reduce((a, b) => a + b, 0);
 
-      const pointsString = `${totalPoints} puntos`;
+      const pointsString = `${totalPoints.toFixed(2)} puntos`;
 
       const pointsBySubjectString = Object.entries(subjects)
         .map(([subject, points]) => {

@@ -17,13 +17,15 @@ import { ChangeSessionSubject } from "../../application/useCases/ChangeSessionSu
 import { GetActiveChallenge } from "../../application/useCases/GetActiveChallenge";
 import ButtonActions from "../constants/ButtonActions";
 import { formatDuration } from "../utils/TimeUtils";
+import { GetStudySessionsFromUser } from "../../application/useCases/GetStudySessionsFromUser";
+import GetActiveStudySession from "../../application/useCases/GetActiveStudySession";
 
 export async function startStudySession(
   message: OmitPartialGroupDMChannel<Message<boolean>>,
   args: string[]
 ) {
   const userId = message.author.id;
-  const subjectName = getSubject(args[0].split("\n")[0]);
+  const subjectName = getSubject(args[0]);
 
   if (args[0] == null || subjectName == null) {
     message.channel.send(
@@ -31,23 +33,24 @@ export async function startStudySession(
     );
     return;
   }
-  const [_, ...endLineSplit] = args.join(" ").split("\n");
-  const description = endLineSplit.join("\n") ?? args.slice(1).join(" ") ?? "";
+
+  // TODO: Fix input description
+  // const [_, ...endLineSplit] = args.join(" ").split("\n");
+  // const description = endLineSplit.join("\n") ?? args.slice(1).join(" ") ?? "";
 
   try {
     const activeChallenge = GetActiveChallenge(userId);
+    const activeStudySession = GetActiveStudySession(userId);
 
     if (!activeChallenge) {
       StartStudySession(userId, subjectName);
       message.channel.send(
-        `⏲️ <@${userId}> comenzaste a estudiar ${subjectName} ${
-          description ? `\n📝 Descripción: ${description}` : ""
-        }`
+        `⏲️ <@${userId}> comenzaste a estudiar ${subjectName}`
       );
       return;
     }
 
-    if (activeChallenge.isActive) {
+    if (activeStudySession) {
       message.channel.send(
         `⏲️ <@${userId}> ya estás estudiando ${subjectName}`
       );
@@ -56,14 +59,14 @@ export async function startStudySession(
 
     const confirmButton = new ButtonBuilder()
       .setCustomId(
-        `${ButtonActions.StartStudySessionWithChallenge}@${subjectName}/${userId}/${description}`
+        `${ButtonActions.StartStudySessionWithChallenge}@${subjectName}/${userId}/`
       )
       .setLabel("SI")
       .setStyle(ButtonStyle.Success);
 
     const cancelButton = new ButtonBuilder()
       .setCustomId(
-        `${ButtonActions.StartStudySessionWithoutChallenge}@${subjectName}/${userId}/$${description}`
+        `${ButtonActions.StartStudySessionWithoutChallenge}@${subjectName}/${userId}/`
       )
       .setLabel("NO")
       .setStyle(ButtonStyle.Danger);
@@ -151,22 +154,30 @@ export async function finishStudySession(
   const userId = message.author.id;
   try {
     const finishedStudySessionData = await FinishStudySession(userId);
+    const {
+      subjectName,
+      challengeCompleted,
+      challenge,
+      humanReadableTotalTime,
+      points,
+      id,
+    } = finishedStudySessionData;
 
-    const challengeText = message.channel.send(
+    const challengeText = await message.channel.send(
       `Terminada sesión de estudio de <@${userId}>${
-        finishedStudySessionData.subjectName === "de forma general"
+        subjectName === "de forma general"
           ? ""
-          : `\n🔖 Asignatura: ${finishedStudySessionData.subjectName}`
+          : `\n🔖 Asignatura: ${subjectName}`
       }
-  🕑 Tiempo Total: ${finishedStudySessionData.humanReadableTotalTime}
-  💯 Puntuación obtenida: ${finishedStudySessionData.points}${
-        finishedStudySessionData.challenge != null
-          ? finishedStudySessionData.challengeCompleted
+  🕑 Tiempo Total: ${humanReadableTotalTime}
+  💯 Puntuación obtenida: ${points}${
+        challenge != null
+          ? challengeCompleted
             ? "\n✅ Reto completado con éxito\n➕ Puntos extra ganados"
             : "\n❌ No has completado el reto\n➖ Has perdido todos los puntos del reto"
           : ""
       }
-  🔑 ID SESIÓN: ${finishedStudySessionData.id}`
+  🔑 ID SESIÓN: ${id}`
     );
     return;
   } catch (error: any) {

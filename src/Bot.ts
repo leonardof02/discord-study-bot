@@ -3,8 +3,7 @@ import { configDotenv } from "dotenv";
 import { manage as manageCommand } from "./presentation/CommandManager";
 import { syncDatabase } from "./infrastructure/DbConnection";
 import { manageInteraction } from "./presentation/InteractionManager";
-
-configDotenv();
+import { env } from "./config/DotenvVars";
 
 const client = new Client({
   intents: [
@@ -31,7 +30,7 @@ client.on("interactionCreate", async (interaction) => {
 });
 
 syncDatabase();
-const token = process.env.DISCORD_TOKEN;
+const token = env.DISCORD_TOKEN;
 client.login(token);
 client.on("ready", () => {
   console.log("El bot está skibidi toilet! 🗣️🚽");

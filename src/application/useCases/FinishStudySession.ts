@@ -9,6 +9,7 @@ import { msToTime } from "../utils/TimeUtils";
 export async function FinishStudySession(
   userId: string
 ): Promise<StudySessionData> {
+
   const existentStudySession = StudySessionRepository.getStudySession(userId);
 
   if (!existentStudySession) {
@@ -16,14 +17,17 @@ export async function FinishStudySession(
   }
 
   const totalTime = Date.now() - existentStudySession.startTime;
+  
   const points = calculatePoints(
     existentStudySession.startTime,
     existentStudySession.challenge
   );
+
   const challengeCompleted = isChallengeCompleted(
     existentStudySession.startTime,
     existentStudySession.challenge
   );
+
   const finishedStudySessionData: StudySessionData = {
     totalTime,
     subjectName: existentStudySession.subjectName,
@@ -51,6 +55,7 @@ function isChallengeCompleted(startTime: number, challenge?: Challenge) {
 }
 
 function calculatePoints(startTime: number, challenge?: Challenge) {
+  
   const passedTime = Date.now() - startTime;
   const pointsGained = Math.round((passedTime / (1000 * 60)) * 100) / 100;
 
