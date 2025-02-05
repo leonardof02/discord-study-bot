@@ -8,7 +8,7 @@ export const ArchivedStudySession = DbConnection.define<
   "StudySession",
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       autoIncrement: true,
       primaryKey: true,
     },
@@ -19,16 +19,16 @@ export const ArchivedStudySession = DbConnection.define<
       type: DataTypes.STRING,
     },
     startTime: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
     },
     totalTime: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
     },
     points: {
       type: DataTypes.DECIMAL(10, 2),
     },
     humanReadableTotalTime: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
     },
     challengeCompleted: {
       type: DataTypes.BOOLEAN,
