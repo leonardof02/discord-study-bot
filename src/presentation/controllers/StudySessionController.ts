@@ -147,11 +147,53 @@ export async function startGeneralStudySession(
   }
 }
 
-export async function finishStudySession(
+export async function confirmFinishStudySession(
   message: OmitPartialGroupDMChannel<Message<boolean>>,
   args: string[]
 ) {
   const userId = message.author.id;
+  const existingSession = GetActiveStudySession(userId);
+
+  if (!existingSession) {
+    message.channel.send({
+      content: `<@${userId}> no tiene una sesión de estudio activa`,
+    });
+    return;
+  }
+
+  const yesButton = new ButtonBuilder()
+    .setCustomId(ButtonActions.ConfirmFinishStudySession)
+    .setLabel("SI")
+    .setStyle(ButtonStyle.Success);
+
+  const noButton = new ButtonBuilder()
+    .setCustomId(ButtonActions.CancelFinishStudySession)
+    .setLabel("NO")
+    .setStyle(ButtonStyle.Danger);
+
+  const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    yesButton,
+    noButton
+  );
+
+  await message.reply({
+    content: `¿Quieres terminar la sesión de estudio?`,
+    components: [row],
+  });
+}
+
+export async function cancelFinishStudySession(interaction: ButtonInteraction) {
+  const userId = interaction.user.id;
+
+  interaction.update({
+    content: `⏲️ <@${userId}> continúa estudiando`,
+    components: [],
+  });
+}
+
+export async function finishStudySession(interaction: ButtonInteraction) {
+  const userId = interaction.user.id;
+
   try {
     const finishedStudySessionData = await FinishStudySession(userId);
     const {
@@ -163,25 +205,29 @@ export async function finishStudySession(
       id,
     } = finishedStudySessionData;
 
-    const challengeText = await message.channel.send(
-      `Terminada sesión de estudio de <@${userId}>${
-        subjectName === "de forma general"
-          ? ""
-          : `\n🔖 Asignatura: ${subjectName}`
-      }
+    const replyText = `Terminada sesión de estudio de <@${userId}>${
+      subjectName === "de forma general"
+        ? ""
+        : `\n🔖 Asignatura: ${subjectName}`
+    }
   🕑 Tiempo Total: ${humanReadableTotalTime}
   💯 Puntuación obtenida: ${points}${
-        challenge != null
-          ? challengeCompleted
-            ? "\n✅ Reto completado con éxito\n➕ Puntos extra ganados"
-            : "\n❌ No has completado el reto\n➖ Has perdido todos los puntos del reto"
-          : ""
-      }
-  🔑 ID SESIÓN: ${id}`
-    );
+      challenge != null
+        ? challengeCompleted
+          ? "\n✅ Reto completado con éxito\n➕ Puntos extra ganados"
+          : "\n❌ No has completado el reto\n➖ Has perdido todos los puntos del reto"
+        : ""
+    }
+  🔑 ID SESIÓN: ${id}`;
+
+    interaction.update({
+      content: replyText,
+      components: [],
+    });
+
     return;
   } catch (error: any) {
-    message.channel.send(error.message);
+    interaction.reply(error.message);
   }
 }
 

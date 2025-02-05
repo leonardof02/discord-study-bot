@@ -2,6 +2,7 @@ import { Message, OmitPartialGroupDMChannel } from "discord.js";
 import { BotActionRouter } from "./types/BotAction";
 import {
   changeSubjectOfSession,
+  confirmFinishStudySession,
   finishStudySession,
   getLastSessions,
   startGeneralStudySession,
@@ -24,7 +25,7 @@ const actions: BotActionRouter = {
   "!ranking": getRanking,
   "!ranking_detallado": getDetailedRanking,
   "!estudiar": startStudySession,
-  "!terminar": finishStudySession,
+  "!terminar": confirmFinishStudySession,
   "!sesiones": getLastSessions,
   "!estudio_general": startGeneralStudySession,
   "!help": sendHelp,

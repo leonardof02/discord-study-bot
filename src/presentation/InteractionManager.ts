@@ -4,12 +4,13 @@ import ButtonActions from "./constants/ButtonActions";
 import {
   acceptSessionWithChallenge,
   acceptSessionWithoutChallenge,
+  cancelFinishStudySession,
+  finishStudySession,
 } from "./controllers/StudySessionController";
 
 export function manageInteraction(
   interaction: ButtonInteraction | ModalSubmitInteraction
 ) {
-  
   // Respond to dynamic commands
   const [command] = interaction.customId.split("@");
   switch (command) {
@@ -21,6 +22,12 @@ export function manageInteraction(
       break;
     case ButtonActions.StartStudySessionWithoutChallenge:
       acceptSessionWithoutChallenge(interaction as ButtonInteraction);
+      break;
+    case ButtonActions.ConfirmFinishStudySession:
+      finishStudySession(interaction as ButtonInteraction);
+      break;
+    case ButtonActions.CancelFinishStudySession:
+      cancelFinishStudySession(interaction as ButtonInteraction);
       break;
     default:
       break;
