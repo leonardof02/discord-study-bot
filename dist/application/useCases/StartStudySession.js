@@ -15,23 +15,13 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StartStudySession = StartStudySession;
 const StudySessionRepository = __importStar(require("../../infrastructure/repositories/StudySessionRepository"));
@@ -55,4 +45,4 @@ function StartStudySession(userId, subjectName, activeChallenge) {
     }
     StudySessionRepository.addStudySession(studySession, activeChallenge);
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiU3RhcnRTdHVkeVNlc3Npb24uanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvYXBwbGljYXRpb24vdXNlQ2FzZXMvU3RhcnRTdHVkeVNlc3Npb24udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFJQSw4Q0E2QkM7QUFoQ0QsaUhBQW1HO0FBQ25HLDJHQUE2RjtBQUU3RixTQUFnQixpQkFBaUIsQ0FDL0IsTUFBYyxFQUNkLFdBQW9CLEVBQ3BCLGVBQTJCO0lBRzNCLE1BQU0sWUFBWSxHQUFxQjtRQUNyQyxNQUFNO1FBQ04sU0FBUyxFQUFFLENBQUM7UUFDWixTQUFTLEVBQUUsSUFBSSxDQUFDLEdBQUcsRUFBRTtRQUNyQixXQUFXLEVBQUUsV0FBVyxJQUFJLGtCQUFrQjtRQUM5QyxNQUFNLEVBQUUsQ0FBQztRQUNULHNCQUFzQixFQUFFLFNBQVM7UUFDakMsa0JBQWtCLEVBQUUsS0FBSztLQUMxQixDQUFDO0lBRUYsTUFBTSxvQkFBb0IsR0FBRyxzQkFBc0IsQ0FBQyxlQUFlLENBQUMsTUFBTSxDQUFDLENBQUM7SUFFNUUsSUFBSSxvQkFBb0I7UUFDdEIsTUFBTSxJQUFJLEtBQUssQ0FDYixlQUFlLE1BQU0seUJBQXlCLG9CQUFvQixDQUFDLFdBQVcsRUFBRSxDQUNqRixDQUFDO0lBRUosSUFBSSxlQUFlLEVBQUUsQ0FBQztRQUNwQixlQUFlLENBQUMsUUFBUSxHQUFHLElBQUksQ0FBQztRQUNoQyxtQkFBbUIsQ0FBQyxZQUFZLENBQUMsTUFBTSxFQUFFLGVBQWUsQ0FBQyxDQUFDO0lBQzVELENBQUM7SUFFRCxzQkFBc0IsQ0FBQyxlQUFlLENBQUMsWUFBWSxFQUFFLGVBQWUsQ0FBQyxDQUFDO0FBQ3hFLENBQUMifQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiU3RhcnRTdHVkeVNlc3Npb24uanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvYXBwbGljYXRpb24vdXNlQ2FzZXMvU3RhcnRTdHVkeVNlc3Npb24udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUlBLDhDQTZCQztBQWhDRCxpSEFBbUc7QUFDbkcsMkdBQTZGO0FBRTdGLFNBQWdCLGlCQUFpQixDQUMvQixNQUFjLEVBQ2QsV0FBb0IsRUFDcEIsZUFBMkI7SUFHM0IsTUFBTSxZQUFZLEdBQXFCO1FBQ3JDLE1BQU07UUFDTixTQUFTLEVBQUUsQ0FBQztRQUNaLFNBQVMsRUFBRSxJQUFJLENBQUMsR0FBRyxFQUFFO1FBQ3JCLFdBQVcsRUFBRSxXQUFXLElBQUksa0JBQWtCO1FBQzlDLE1BQU0sRUFBRSxDQUFDO1FBQ1Qsc0JBQXNCLEVBQUUsU0FBUztRQUNqQyxrQkFBa0IsRUFBRSxLQUFLO0tBQzFCLENBQUM7SUFFRixNQUFNLG9CQUFvQixHQUFHLHNCQUFzQixDQUFDLGVBQWUsQ0FBQyxNQUFNLENBQUMsQ0FBQztJQUU1RSxJQUFJLG9CQUFvQjtRQUN0QixNQUFNLElBQUksS0FBSyxDQUNiLGVBQWUsTUFBTSx5QkFBeUIsb0JBQW9CLENBQUMsV0FBVyxFQUFFLENBQ2pGLENBQUM7SUFFSixJQUFJLGVBQWUsRUFBRSxDQUFDO1FBQ3BCLGVBQWUsQ0FBQyxRQUFRLEdBQUcsSUFBSSxDQUFDO1FBQ2hDLG1CQUFtQixDQUFDLFlBQVksQ0FBQyxNQUFNLEVBQUUsZUFBZSxDQUFDLENBQUM7SUFDNUQsQ0FBQztJQUVELHNCQUFzQixDQUFDLGVBQWUsQ0FBQyxZQUFZLEVBQUUsZUFBZSxDQUFDLENBQUM7QUFDeEUsQ0FBQyJ9

@@ -10,22 +10,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.syncDatabase = syncDatabase;
+const DotenvVars_1 = require("../config/DotenvVars");
 const sequelize_1 = require("sequelize");
 const DbConnection = new sequelize_1.Sequelize({
-    dialect: "sqlite",
-    storage: "./database.db",
+    dialect: "postgres",
+    host: DotenvVars_1.env.DB_HOST,
+    port: parseInt(DotenvVars_1.env.DB_PORT),
+    username: DotenvVars_1.env.DB_USERNAME,
+    password: DotenvVars_1.env.DB_PASSWORD,
+    database: DotenvVars_1.env.DB_NAME,
+    logging: false,
     pool: {
-        max: 5,
-        min: 0,
+        max: 10,
+        min: 2,
+        acquire: 30000,
         idle: 10000,
     },
 });
 function syncDatabase() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield DbConnection.sync({
-                alter: true,
-            });
+            DbConnection.authenticate();
+            yield DbConnection.sync({ alter: true });
             console.log("Database synced!");
         }
         catch (error) {
@@ -34,4 +40,4 @@ function syncDatabase() {
     });
 }
 exports.default = DbConnection;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiRGJDb25uZWN0aW9uLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vc3JjL2luZnJhc3RydWN0dXJlL0RiQ29ubmVjdGlvbi50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7OztBQVlBLG9DQVNDO0FBckJELHlDQUFzQztBQUV0QyxNQUFNLFlBQVksR0FBRyxJQUFJLHFCQUFTLENBQUM7SUFDakMsT0FBTyxFQUFFLFFBQVE7SUFDakIsT0FBTyxFQUFFLGVBQWU7SUFDeEIsSUFBSSxFQUFFO1FBQ0osR0FBRyxFQUFFLENBQUM7UUFDTixHQUFHLEVBQUUsQ0FBQztRQUNOLElBQUksRUFBRSxLQUFLO0tBQ1o7Q0FDRixDQUFDLENBQUM7QUFFSCxTQUFzQixZQUFZOztRQUNoQyxJQUFJLENBQUM7WUFDSCxNQUFNLFlBQVksQ0FBQyxJQUFJLENBQUM7Z0JBQ3RCLEtBQUssRUFBRSxJQUFJO2FBQ1osQ0FBQyxDQUFDO1lBQ0gsT0FBTyxDQUFDLEdBQUcsQ0FBQyxrQkFBa0IsQ0FBQyxDQUFDO1FBQ2xDLENBQUM7UUFBQyxPQUFPLEtBQUssRUFBRSxDQUFDO1lBQ2YsT0FBTyxDQUFDLEtBQUssQ0FBQyx5QkFBeUIsRUFBRSxLQUFLLENBQUMsQ0FBQztRQUNsRCxDQUFDO0lBQ0gsQ0FBQztDQUFBO0FBRUQsa0JBQWUsWUFBWSxDQUFDIn0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiRGJDb25uZWN0aW9uLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vc3JjL2luZnJhc3RydWN0dXJlL0RiQ29ubmVjdGlvbi50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7OztBQW1CQSxvQ0FRQztBQTNCRCxxREFBMkM7QUFDM0MseUNBQXNDO0FBRXRDLE1BQU0sWUFBWSxHQUFHLElBQUkscUJBQVMsQ0FBQztJQUNqQyxPQUFPLEVBQUUsVUFBVTtJQUNuQixJQUFJLEVBQUUsZ0JBQUcsQ0FBQyxPQUFPO0lBQ2pCLElBQUksRUFBRSxRQUFRLENBQUMsZ0JBQUcsQ0FBQyxPQUFPLENBQUM7SUFDM0IsUUFBUSxFQUFFLGdCQUFHLENBQUMsV0FBVztJQUN6QixRQUFRLEVBQUUsZ0JBQUcsQ0FBQyxXQUFXO0lBQ3pCLFFBQVEsRUFBRSxnQkFBRyxDQUFDLE9BQU87SUFDckIsT0FBTyxFQUFFLEtBQUs7SUFDZCxJQUFJLEVBQUU7UUFDSixHQUFHLEVBQUUsRUFBRTtRQUNQLEdBQUcsRUFBRSxDQUFDO1FBQ04sT0FBTyxFQUFFLEtBQUs7UUFDZCxJQUFJLEVBQUUsS0FBSztLQUNaO0NBQ0YsQ0FBQyxDQUFDO0FBRUgsU0FBc0IsWUFBWTs7UUFDaEMsSUFBSSxDQUFDO1lBQ0gsWUFBWSxDQUFDLFlBQVksRUFBRSxDQUFDO1lBQzVCLE1BQU0sWUFBWSxDQUFDLElBQUksQ0FBQyxFQUFFLEtBQUssRUFBRSxJQUFJLEVBQUUsQ0FBQyxDQUFDO1lBQ3pDLE9BQU8sQ0FBQyxHQUFHLENBQUMsa0JBQWtCLENBQUMsQ0FBQztRQUNsQyxDQUFDO1FBQUMsT0FBTyxLQUFLLEVBQUUsQ0FBQztZQUNmLE9BQU8sQ0FBQyxLQUFLLENBQUMseUJBQXlCLEVBQUUsS0FBSyxDQUFDLENBQUM7UUFDbEQsQ0FBQztJQUNILENBQUM7Q0FBQTtBQUVELGtCQUFlLFlBQVksQ0FBQyJ9

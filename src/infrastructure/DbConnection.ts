@@ -1,20 +1,26 @@
+import { env } from "../config/DotenvVars";
 import { Sequelize } from "sequelize";
 
 const DbConnection = new Sequelize({
-  dialect: "sqlite",
-  storage: "./database.db",
+  dialect: "postgres",
+  host: env.DB_HOST,
+  port: parseInt(env.DB_PORT),
+  username: env.DB_USERNAME,
+  password: env.DB_PASSWORD,
+  database: env.DB_NAME,
+  logging: false,
   pool: {
-    max: 5,
-    min: 0,
+    max: 10,
+    min: 2,
+    acquire: 30000,
     idle: 10000,
   },
 });
 
 export async function syncDatabase() {
   try {
-    await DbConnection.sync({
-      alter: true,
-    });
+    DbConnection.authenticate();
+    await DbConnection.sync({ alter: true });
     console.log("Database synced!");
   } catch (error) {
     console.error("Error syncing database:", error);

@@ -1,3 +1,4 @@
+
 import { OmitPartialGroupDMChannel, Message } from "discord.js";
 
 export async function sendHelp(

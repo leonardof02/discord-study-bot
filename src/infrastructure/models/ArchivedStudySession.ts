@@ -1,5 +1,5 @@
-import { DataTypes, Model, Optional } from "sequelize";
 import DbConnection from "../DbConnection";
+import { DataTypes, Model, Optional } from "sequelize";
 import { StudySessionData } from "../../domain/StudySessionData";
 
 export const ArchivedStudySession = DbConnection.define<
@@ -19,16 +19,16 @@ export const ArchivedStudySession = DbConnection.define<
       type: DataTypes.STRING,
     },
     startTime: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
     },
     totalTime: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
     },
     points: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.DECIMAL(10, 2),
     },
     humanReadableTotalTime: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
     },
     challengeCompleted: {
       type: DataTypes.BOOLEAN,

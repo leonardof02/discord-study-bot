@@ -17,7 +17,6 @@ import { ChangeSessionSubject } from "../../application/useCases/ChangeSessionSu
 import { GetActiveChallenge } from "../../application/useCases/GetActiveChallenge";
 import ButtonActions from "../constants/ButtonActions";
 import { formatDuration } from "../utils/TimeUtils";
-import { GetStudySessionsFromUser } from "../../application/useCases/GetStudySessionsFromUser";
 import GetActiveStudySession from "../../application/useCases/GetActiveStudySession";
 
 export async function startStudySession(
