@@ -1,0 +1,28 @@
+import { ISubjectRepository } from "../../domain/ISubjectRepository";
+import { Subject, SubjectColor } from "../../domain/Subject";
+import { v4 as uuidv4 } from "uuid";
+
+export type RemoveSubjectCommand = {
+  id: string;
+};
+
+export type AddSubjectCommand = {
+  name: string;
+  color: SubjectColor;
+};
+
+export class AddSubjectCommandHandler {
+  constructor(private readonly subjectRepository: ISubjectRepository) {}
+
+  async handle(command: AddSubjectCommand) {
+    const { name, color } = command;
+
+    const newSubject: Subject = {
+      id: uuidv4(),
+      name,
+      color,
+    };
+
+    await this.subjectRepository.addSubject(newSubject);
+  }
+}

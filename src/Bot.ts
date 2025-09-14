@@ -1,9 +1,11 @@
 import { Client, GatewayIntentBits } from "discord.js";
-import { configDotenv } from "dotenv";
-import { manage as manageCommand } from "./presentation/CommandManager";
-import { syncDatabase } from "./infrastructure/DbConnection";
-import { manageInteraction } from "./presentation/InteractionManager";
-import { env } from "./config/DotenvVars";
+import { env } from "./shared/infrastructure/config/DotenvVars";
+import { syncDatabase } from "./shared/infrastructure/DbConnection";
+import { manageCommand } from "./shared/presentation/CommandManager";
+import { manageInteraction } from "./shared/presentation/InteractionManager";
+
+console.log("Starting bot...");
+console.log("Env loaded!", env);
 
 const client = new Client({
   intents: [
@@ -25,7 +27,12 @@ client.on("messageCreate", async (message) => {
 });
 
 client.on("interactionCreate", async (interaction) => {
-  if (!interaction.isButton() && !interaction.isModalSubmit()) return;
+  if (
+    !interaction.isButton() &&
+    !interaction.isModalSubmit() &&
+    !interaction.isStringSelectMenu()
+  )
+    return;
   manageInteraction(interaction);
 });
 

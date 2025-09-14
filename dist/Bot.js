@@ -10,10 +10,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
-const CommandManager_1 = require("./presentation/CommandManager");
-const DbConnection_1 = require("./infrastructure/DbConnection");
-const InteractionManager_1 = require("./presentation/InteractionManager");
-const DotenvVars_1 = require("./config/DotenvVars");
+const DotenvVars_1 = require("./shared/infrastructure/config/DotenvVars");
+const DbConnection_1 = require("./shared/infrastructure/DbConnection");
+const CommandManager_1 = require("./shared/presentation/CommandManager");
+const InteractionManager_1 = require("./shared/presentation/InteractionManager");
+console.log("Starting bot...");
+console.log("Env loaded!", DotenvVars_1.env);
 const client = new discord_js_1.Client({
     intents: [
         discord_js_1.GatewayIntentBits.DirectMessages,
@@ -30,10 +32,12 @@ const client = new discord_js_1.Client({
 client.on("messageCreate", (message) => __awaiter(void 0, void 0, void 0, function* () {
     if (message.author.bot)
         return;
-    (0, CommandManager_1.manage)(message);
+    (0, CommandManager_1.manageCommand)(message);
 }));
 client.on("interactionCreate", (interaction) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!interaction.isButton() && !interaction.isModalSubmit())
+    if (!interaction.isButton() &&
+        !interaction.isModalSubmit() &&
+        !interaction.isStringSelectMenu())
         return;
     (0, InteractionManager_1.manageInteraction)(interaction);
 }));
@@ -43,4 +47,4 @@ client.login(token);
 client.on("ready", () => {
     console.log("El bot está skibidi toilet! 🗣️🚽");
 });
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQm90LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vc3JjL0JvdC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7OztBQUFBLDJDQUF1RDtBQUV2RCxrRUFBd0U7QUFDeEUsZ0VBQTZEO0FBQzdELDBFQUFzRTtBQUN0RSxvREFBMEM7QUFFMUMsTUFBTSxNQUFNLEdBQUcsSUFBSSxtQkFBTSxDQUFDO0lBQ3hCLE9BQU8sRUFBRTtRQUNQLDhCQUFpQixDQUFDLGNBQWM7UUFDaEMsOEJBQWlCLENBQUMsTUFBTTtRQUN4Qiw4QkFBaUIsQ0FBQyxhQUFhO1FBQy9CLDhCQUFpQixDQUFDLGNBQWM7UUFDaEMsOEJBQWlCLENBQUMscUJBQXFCO1FBQ3ZDLDhCQUFpQixDQUFDLFlBQVk7UUFDOUIsOEJBQWlCLENBQUMsa0JBQWtCO1FBQ3BDLDhCQUFpQixDQUFDLHNCQUFzQjtRQUN4Qyw4QkFBaUIsQ0FBQyxtQkFBbUI7S0FDdEM7Q0FDRixDQUFDLENBQUM7QUFFSCxNQUFNLENBQUMsRUFBRSxDQUFDLGVBQWUsRUFBRSxDQUFPLE9BQU8sRUFBRSxFQUFFO0lBQzNDLElBQUksT0FBTyxDQUFDLE1BQU0sQ0FBQyxHQUFHO1FBQUUsT0FBTztJQUMvQixJQUFBLHVCQUFhLEVBQUMsT0FBTyxDQUFDLENBQUM7QUFDekIsQ0FBQyxDQUFBLENBQUMsQ0FBQztBQUVILE1BQU0sQ0FBQyxFQUFFLENBQUMsbUJBQW1CLEVBQUUsQ0FBTyxXQUFXLEVBQUUsRUFBRTtJQUNuRCxJQUFJLENBQUMsV0FBVyxDQUFDLFFBQVEsRUFBRSxJQUFJLENBQUMsV0FBVyxDQUFDLGFBQWEsRUFBRTtRQUFFLE9BQU87SUFDcEUsSUFBQSxzQ0FBaUIsRUFBQyxXQUFXLENBQUMsQ0FBQztBQUNqQyxDQUFDLENBQUEsQ0FBQyxDQUFDO0FBRUgsSUFBQSwyQkFBWSxHQUFFLENBQUM7QUFDZixNQUFNLEtBQUssR0FBRyxnQkFBRyxDQUFDLGFBQWEsQ0FBQztBQUNoQyxNQUFNLENBQUMsS0FBSyxDQUFDLEtBQUssQ0FBQyxDQUFDO0FBQ3BCLE1BQU0sQ0FBQyxFQUFFLENBQUMsT0FBTyxFQUFFLEdBQUcsRUFBRTtJQUN0QixPQUFPLENBQUMsR0FBRyxDQUFDLG1DQUFtQyxDQUFDLENBQUM7QUFDbkQsQ0FBQyxDQUFDLENBQUMifQ==
+//# sourceMappingURL=Bot.js.map

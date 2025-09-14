@@ -10,6 +10,17 @@ services:
     networks:
       - default-net
 
+  db_test:
+    image: postgres:latest
+    restart: always
+    env_file: .env.test
+    ports:
+      - 5433:5432
+    volumes:
+      - ./data/postgres_test:/var/lib/postgresql/data
+    networks:
+      - default-net
+
   bot:
     build: .
     restart: always
