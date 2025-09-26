@@ -8,14 +8,13 @@ import {
 } from "discord.js";
 import SessionButtonActions from "../../constants/SessionInteractions";
 import { getAllSubjectsQuery } from "../../../../subjects/DependencyInjection";
-import { getActiveStudySessionQueryHandler } from "../../../DependencyInjection";
 
 export async function createStudySession(
   message: OmitPartialGroupDMChannel<Message<boolean>>,
   args: string[]
 ) {
   const subjects = await getAllSubjectsQuery.handle({});
-  console.log("AUTHOR que va a estudiar: ", message.author.id)
+  console.log("AUTHOR que va a estudiar: ", message.author.id);
 
   const selectSubjectButtons =
     new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(

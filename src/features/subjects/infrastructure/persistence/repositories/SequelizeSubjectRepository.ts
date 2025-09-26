@@ -1,13 +1,27 @@
 import { ISubjectRepository } from "../../../domain/ISubjectRepository";
 import { Subject } from "../../../domain/Subject";
 import { SubjectModel } from "../models/SubjectModel";
-import { RegexTool } from "../../RegexTool";
+import { RegexTool } from "../../../domain/RegexTool";
 
 export class SequelizeSubjectRepository implements ISubjectRepository {
   private readonly _regexTool: RegexTool;
 
   constructor() {
     this._regexTool = new RegexTool();
+  }
+  findSubjectByName(name: string): Promise<Subject | null> {
+    return SubjectModel.findOne({
+      where: {
+        name,
+      },
+    }).then((subject) => {
+      if (!subject) return null;
+      return {
+        id: subject.dataValues.id,
+        color: subject.dataValues.color,
+        name: subject.dataValues.name,
+      };
+    });
   }
 
   async addSubject(subject: Subject): Promise<void> {

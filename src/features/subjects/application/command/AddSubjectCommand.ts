@@ -17,6 +17,14 @@ export class AddSubjectCommandHandler {
   async handle(command: AddSubjectCommand) {
     const { name, color } = command;
 
+    const existingSubject = await this.subjectRepository.findSubjectByName(
+      name
+    );
+
+    if (existingSubject) {
+      throw new Error("Subject already exists");
+    }
+
     const newSubject: Subject = {
       id: uuidv4(),
       name,

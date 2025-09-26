@@ -3,11 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node ./dist/Bot.js",
     "prod": "tsc && node dist/Bot.js",
     "dev": "tsc --watch & nodemon dist/Bot.js",
-    "test": "jest"
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:watch": "vitest --watch",
+    "test:ui": "vitest --ui"
   },
   "keywords": [],
   "author": "@leonardof02",

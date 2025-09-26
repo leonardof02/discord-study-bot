@@ -1,11 +1,11 @@
 import { ISubjectRepository } from "../../domain/ISubjectRepository";
 
-export type GetAllSubjectQuery = {};
+export type GetAllSubjectsQuery = {};
 
-export class GetAllSubjectQueryHandler {
+export class GetAllSubjectsQueryHandler {
   constructor(private readonly subjectRepository: ISubjectRepository) {}
 
-  async handle(query: GetAllSubjectQuery) {
+  async handle(query: GetAllSubjectsQuery) {
     const subjects = await this.subjectRepository.getAllSubjects();
     return subjects;
   }

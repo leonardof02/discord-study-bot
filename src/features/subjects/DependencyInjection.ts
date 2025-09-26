@@ -1,6 +1,6 @@
 import { AddSubjectCommandHandler } from "./application/command/AddSubjectCommand";
 import { RemoveSubjectCommandHandler } from "./application/command/RemoveSubjectCommand";
-import { GetAllSubjectQueryHandler } from "./application/queries/GetAllSubjects";
+import { GetAllSubjectsQueryHandler } from "./application/queries/GetAllSubjects";
 import { GetSubjectQueryHandler } from "./application/queries/GetSubject";
 import { SequelizeSubjectRepository } from "./infrastructure/persistence/repositories/SequelizeSubjectRepository";
 
@@ -14,7 +14,7 @@ export const removeSubjectCommand = new RemoveSubjectCommandHandler(
   sequelizeSubjectRepository
 );
 
-export const getAllSubjectsQuery = new GetAllSubjectQueryHandler(
+export const getAllSubjectsQuery = new GetAllSubjectsQueryHandler(
   sequelizeSubjectRepository
 );
 
