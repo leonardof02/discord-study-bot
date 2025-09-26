@@ -1,9 +1,13 @@
 import { ButtonInteraction } from "discord.js";
-import { finishStudySessionCommandHandler } from "../../../DependencyInjection";
+import { DependencyContainer } from "../../../../../shared/DependencyInjectionContainer";
+import { FinishStudySessionCommandHandlerToken } from "../../../application/commands/FinishStudySessionCommand";
 
 export async function finishStudySession(interaction: ButtonInteraction) {
+  const finishStudySessionCommandHandler = DependencyContainer.resolve(
+    FinishStudySessionCommandHandlerToken
+  );
+
   const userId = interaction.user.id;
-  console.log(userId);
 
   try {
     const finishedStudySessionData =
@@ -13,9 +17,7 @@ export async function finishStudySession(interaction: ButtonInteraction) {
       finishedStudySessionData;
 
     const replyText = `Terminada sesión de estudio de <@${userId}>${
-      subjectId
-        ? "\n🔖 Asignatura: ${subjectId}"
-        : `\n🔖 Estudio general`
+      subjectId ? "\n🔖 Asignatura: ${subjectId}" : `\n🔖 Estudio general`
     }
   🕑 Tiempo Total: ${humanReadableTotalTime}
   💯 Puntuación obtenida: ${points}${

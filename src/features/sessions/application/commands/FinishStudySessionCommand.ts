@@ -1,3 +1,4 @@
+import { createDIToken } from "fioc";
 import { IActiveChallengeRepository } from "../../domain/interfaces/IActiveChallengeRepository";
 import { IActiveStudySessionRepository } from "../../domain/interfaces/IActiveStudySessionRepository";
 import { IFinishedStudySessionRepository } from "../../domain/interfaces/IFinishedStudySessionRepository";
@@ -29,8 +30,15 @@ export class FinishStudySessionCommandHandler {
       this.activeChallengeRepository.removeActiveChallenge(userId);
 
     this.activeStudySessionsRepository.removeStudySession(userId);
-    await this.finishedStudySessionsRepository.archiveSession(existentStudySession);
+    await this.finishedStudySessionsRepository.archiveSession(
+      existentStudySession
+    );
 
     return existentStudySession;
   }
 }
+
+export const FinishStudySessionCommandHandlerToken =
+  createDIToken<FinishStudySessionCommandHandler>(
+    "FinishStudySessionCommandHandler"
+  );

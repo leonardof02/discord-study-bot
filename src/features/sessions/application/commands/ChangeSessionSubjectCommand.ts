@@ -1,3 +1,4 @@
+import { createDIToken } from "fioc";
 import { IActiveStudySessionRepository } from "../../domain/interfaces/IActiveStudySessionRepository";
 
 type ChangeSessionSubjectCommand = {
@@ -20,3 +21,8 @@ export class ChangeSessionSubjectCommandHandler {
     this.activeStudySessionsRepository.saveSession(userId, session);
   }
 }
+
+export const ChangeSessionSubjectCommandHandlerToken =
+  createDIToken<ChangeSessionSubjectCommandHandler>(
+    "ChangeSessionSubjectCommandHandler"
+  );

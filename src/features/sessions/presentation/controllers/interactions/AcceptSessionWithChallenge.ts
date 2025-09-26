@@ -1,14 +1,25 @@
 import { ButtonInteraction } from "discord.js";
 import { formatDuration } from "../../../../../shared/presentation/utils/TimeUtils";
-import {
-  getActiveChallengeQueryHandler,
-  startStudySessionCommandHandler,
-} from "../../../DependencyInjection";
-import { getSubjectQuery } from "../../../../subjects/DependencyInjection";
+import { GetSubjectQueryHandlerToken } from "../../../../subjects/application/queries/GetSubject";
+import { DependencyContainer } from "../../../../../shared/DependencyInjectionContainer";
+import { GetActiveChallengeQueryHandlerToken } from "../../../application/queries/GetActiveChallengeQuery";
+import { StartStudySessionCommandHandlerToken } from "../../../application/commands/StartStudySessionCommand";
 
 export async function acceptSessionWithChallenge(
   interaction: ButtonInteraction
 ) {
+  const getSubjectQuery = DependencyContainer.resolve(
+    GetSubjectQueryHandlerToken
+  );
+
+  const getActiveChallengeQueryHandler = DependencyContainer.resolve(
+    GetActiveChallengeQueryHandlerToken
+  );
+
+  const startStudySessionCommandHandler = DependencyContainer.resolve(
+    StartStudySessionCommandHandlerToken
+  );
+
   const currentUserId = interaction.user.id;
   const args = interaction.customId.split("@")[1];
   const [subjectArg, userId] = args.split("/");

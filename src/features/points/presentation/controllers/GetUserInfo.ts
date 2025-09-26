@@ -5,13 +5,21 @@ import {
   EmbedBuilder,
 } from "discord.js";
 import fetch from "node-fetch";
-import { getPointsByUserQueryHandler } from "../../DependencyInjection";
-import { getStudySessionsFromUserQueryHandler } from "../../../sessions/DependencyInjection";
+import { DependencyContainer } from "../../../../shared/DependencyInjectionContainer";
+import { GetStudySessionsFromUserQueryHandlerToken } from "../../../sessions/application/queries/GetStudySessionsFromUserQuery";
+import { GetPointsByUserQueryHandlerToken } from "../../application/queries/GetPointsByUserQuery";
 
 export async function getUserInfo(
   message: OmitPartialGroupDMChannel<Message<boolean>>,
   args: string[]
 ) {
+  const getPointsByUserQueryHandler = DependencyContainer.resolve(
+    GetPointsByUserQueryHandlerToken
+  );
+  const getStudySessionsFromUserQueryHandler = DependencyContainer.resolve(
+    GetStudySessionsFromUserQueryHandlerToken
+  );
+
   const userId = message.author.id;
   const pointsBySubject = await getPointsByUserQueryHandler.handle({ userId });
   const studySessions = await getStudySessionsFromUserQueryHandler.handle({

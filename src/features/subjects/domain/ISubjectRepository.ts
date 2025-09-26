@@ -1,3 +1,5 @@
+import { createDIToken } from "fioc";
+import { SequelizeSubjectRepository } from "../infrastructure/persistence/repositories/SequelizeSubjectRepository";
 import { Subject } from "./Subject";
 
 export interface ISubjectRepository {
@@ -9,3 +11,6 @@ export interface ISubjectRepository {
   getSubjectById(id: string): Promise<Subject | null>;
   getAllSubjects(): Promise<Subject[]>;
 }
+
+export const ISubjectRepositoryToken =
+  createDIToken<ISubjectRepository>("ISubjectRepository");

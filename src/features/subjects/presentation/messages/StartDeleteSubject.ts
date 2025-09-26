@@ -10,20 +10,26 @@ import {
   SubjectSelectActions,
   SubjectButtonActions,
 } from "../constants/SubjectInteractions";
-import { getAllSubjectsQuery } from "../../DependencyInjection";
 import { createBalancedGridLayoutOfButtons } from "../../../../shared/presentation/utils/LayoutUtils";
+import { GetAllSubjectsQueryHandler, GetAllSubjectsQueryHandlerToken } from "../../application/queries/GetAllSubjects";
+import { DependencyContainer } from "../../../../shared/DependencyInjectionContainer";
+
 
 export async function startDeleteSubject(
   message: OmitPartialGroupDMChannel<Message<boolean>>,
   args: string[]
 ) {
+  const getAllSubjectsQuery = DependencyContainer.resolve(
+    GetAllSubjectsQueryHandlerToken
+  );
+
   const allSubjects = await getAllSubjectsQuery.handle({});
-  
+
   if (allSubjects.length === 0) {
     message.reply("No hay ninguna asignatura registrada");
     return;
   }
-  
+
   const options = allSubjects.map((subject) => {
     return {
       buttonAction: SubjectButtonActions.DeleteSubject,

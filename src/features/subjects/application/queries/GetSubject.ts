@@ -1,3 +1,4 @@
+import { createDIToken } from "fioc";
 import { ISubjectRepository } from "../../domain/ISubjectRepository";
 
 export type GetSubjectQuery = {
@@ -13,3 +14,7 @@ export class GetSubjectQueryHandler {
     return subjects;
   }
 }
+
+export const GetSubjectQueryHandlerToken =
+  createDIToken<GetSubjectQueryHandler>("GetSubjectQueryHandler");
+

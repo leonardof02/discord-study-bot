@@ -1,3 +1,4 @@
+import { createDIToken } from "fioc";
 import { IFinishedStudySessionRepository } from "../../domain/interfaces/IFinishedStudySessionRepository";
 
 type GetStudySessionsFromUserQuery = {
@@ -16,3 +17,8 @@ export class GetStudySessionsFromUserQueryHandler {
     );
   }
 }
+
+export const GetStudySessionsFromUserQueryHandlerToken =
+  createDIToken<GetStudySessionsFromUserQueryHandler>(
+    "GetStudySessionsFromUserQueryHandler"
+  );

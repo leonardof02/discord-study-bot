@@ -1,9 +1,14 @@
 import { ButtonInteraction } from "discord.js";
-import { startStudySessionCommandHandler } from "../../../DependencyInjection";
+import { StartStudySessionCommandHandlerToken } from "../../../application/commands/StartStudySessionCommand";
+import { DependencyContainer } from "../../../../../shared/DependencyInjectionContainer";
 
 export async function acceptSessionWithoutChallenge(
   interaction: ButtonInteraction
 ) {
+  const startStudySessionCommandHandler = DependencyContainer.resolve(
+    StartStudySessionCommandHandlerToken
+  );
+
   const currentUserId = interaction.user.id;
   const args = interaction.customId.split("@")[1];
   const [subjectName, userId, description] = args.split("/");

@@ -7,8 +7,9 @@ import {
 } from "discord.js";
 import SessionButtonActions from "../../constants/SessionInteractions";
 import { formatDuration } from "../../../../../shared/presentation/utils/TimeUtils";
-import { createRandomChallengeCommandHandler } from "../../../DependencyInjection";
 import { ChallengeType } from "../../../domain/entities/ChallengeType";
+import { DependencyContainer } from "../../../../../shared/DependencyInjectionContainer";
+import { CreateRandomChallengeCommandHandlerToken } from "../../../application/commands/CreateRandomChallengeCommand";
 
 /** Crea un reto aleatorio segun la dificultad indicada en el mensaje
  * @param message Mensaje enviado por el usuario
@@ -18,6 +19,10 @@ export function createRandomChallenge(
   message: OmitPartialGroupDMChannel<Message<boolean>>,
   args: string[]
 ) {
+  const createRandomChallengeCommandHandler = DependencyContainer.resolve(
+    CreateRandomChallengeCommandHandlerToken
+  );
+
   const userId = message.author.id;
 
   if (
@@ -45,7 +50,8 @@ export function createRandomChallenge(
 
     message.channel.send({
       content: `⏲️ <@${userId}> ha creado un reto aleatorio de ${formatDuration(
-        randomChallenge)}`,
+        randomChallenge
+      )}`,
       components: [row],
     });
   } catch (error: any) {

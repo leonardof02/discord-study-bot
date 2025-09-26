@@ -1,3 +1,7 @@
+import { createDIToken } from "fioc";
+
+export const RegexToolToken = createDIToken<RegexTool>("RegexTool");
+
 export class RegexTool {
   private readonly accentMap: { [key: string]: string } = {
     a: "[aáÁ]",

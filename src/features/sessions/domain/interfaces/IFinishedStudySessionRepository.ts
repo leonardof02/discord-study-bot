@@ -1,5 +1,6 @@
 // src/features/sessions/domain/IArchivedStudySessionRepository.ts
 
+import { createDIToken } from "fioc";
 import { SubjectScore } from "../../../points/domain/SubjectScore";
 import { UserScore } from "../../../points/domain/UserScore";
 import { StudySession } from "../entities/StudySession";
@@ -17,3 +18,8 @@ export interface IFinishedStudySessionRepository {
     userId: string
   ): Promise<{ subjectName: string | null; totalPoints: number }[]>;
 }
+
+export const IFinishedStudySessionRepositoryToken =
+  createDIToken<IFinishedStudySessionRepository>(
+    "IFinishedStudySessionRepository"
+  );

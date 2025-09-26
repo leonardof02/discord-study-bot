@@ -6,13 +6,21 @@ import {
 } from "discord.js";
 import SessionButtonActions from "../../constants/SessionInteractions";
 import { formatDuration } from "../../../../../shared/presentation/utils/TimeUtils";
-import {
-  getActiveChallengeQueryHandler,
-  startStudySessionCommandHandler,
-} from "../../../DependencyInjection";
+import { DependencyContainer } from "../../../../../shared/DependencyInjectionContainer";
+import { StartStudySessionCommandHandlerToken } from "../../../application/commands/StartStudySessionCommand";
+import { GetActiveChallengeQueryHandlerToken } from "../../../application/queries/GetActiveChallengeQuery";
 
 export async function startGeneralStudySession(interaction: ButtonInteraction) {
+  const getActiveChallengeQueryHandler = DependencyContainer.resolve(
+    GetActiveChallengeQueryHandlerToken
+  );
+
+  const startStudySessionCommandHandler = DependencyContainer.resolve(
+    StartStudySessionCommandHandlerToken
+  );
+
   const userId = interaction.customId.split("@")[1];
+
   try {
     const activeChallenge = getActiveChallengeQueryHandler.handle({ userId });
 

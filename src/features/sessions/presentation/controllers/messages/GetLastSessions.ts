@@ -1,10 +1,15 @@
 import { OmitPartialGroupDMChannel, Message } from "discord.js";
-import { getLastStudySessionsQueryHandler } from "../../../DependencyInjection";
+import { DependencyContainer } from "../../../../../shared/DependencyInjectionContainer";
+import { GetLastStudySessionsQueryHandlerToken } from "../../../application/queries/GetLastStudySessionsQuery";
 
 export async function getLastSessions(
   message: OmitPartialGroupDMChannel<Message<boolean>>,
   args: string[]
 ) {
+  const getLastStudySessionsQueryHandler = DependencyContainer.resolve(
+    GetLastStudySessionsQueryHandlerToken
+  );
+
   let numberOfSessions = parseInt(args[0]);
   if (Number.isNaN(numberOfSessions)) numberOfSessions = 10;
 

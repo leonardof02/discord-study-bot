@@ -1,9 +1,11 @@
-export class InMemoryActiveChallengeRepository {
-  private readonly activeChallenges: Record<string, Challenge> = {};
+import { IActiveChallengeRepository } from "../../../domain/interfaces/IActiveChallengeRepository";
 
-  constructor() {
-    this.activeChallenges = {};
-  }
+export class InMemoryActiveChallengeRepository
+  implements IActiveChallengeRepository
+{
+  constructor(
+    private readonly activeChallenges: Record<string, Challenge> = {}
+  ) {}
 
   getActiveChallenge(userId: string) {
     return this.activeChallenges[userId];

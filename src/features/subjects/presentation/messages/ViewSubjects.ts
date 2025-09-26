@@ -1,10 +1,15 @@
 import { OmitPartialGroupDMChannel, Message } from "discord.js";
-import { getAllSubjectsQuery } from "../../DependencyInjection";
+import { GetAllSubjectsQueryHandlerToken } from "../../application/queries/GetAllSubjects";
+import { DependencyContainer } from "../../../../shared/DependencyInjectionContainer";
 
 export async function viewSubjects(
   message: OmitPartialGroupDMChannel<Message<boolean>>,
   args: string[]
 ) {
+  const getAllSubjectsQuery = DependencyContainer.resolve(
+    GetAllSubjectsQueryHandlerToken
+  );
+
   const allSubjects = await getAllSubjectsQuery.handle({});
 
   if (allSubjects.length === 0) {

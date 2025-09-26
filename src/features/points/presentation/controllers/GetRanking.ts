@@ -1,10 +1,18 @@
 import { OmitPartialGroupDMChannel, Message } from "discord.js";
-import { getRankingCommandHandler } from "../../DependencyInjection";
+import { DependencyContainer } from "../../../../shared/DependencyInjectionContainer";
+import {
+  GetStudyRankingQueryHandlerToken,
+} from "../../application/queries/GetStudyRankingQuery";
 
 export async function getRanking(
   message: OmitPartialGroupDMChannel<Message<boolean>>,
   args: string[]
 ) {
+
+  const getRankingCommandHandler = DependencyContainer.resolve(
+    GetStudyRankingQueryHandlerToken
+  );
+
   const results = await getRankingCommandHandler.handle({});
 
   const ranking: string[] = results.map((result, index) => {

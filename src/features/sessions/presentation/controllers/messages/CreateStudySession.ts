@@ -7,12 +7,17 @@ import {
   StringSelectMenuBuilder,
 } from "discord.js";
 import SessionButtonActions from "../../constants/SessionInteractions";
-import { getAllSubjectsQuery } from "../../../../subjects/DependencyInjection";
+import { DependencyContainer } from "../../../../../shared/DependencyInjectionContainer";
+import { GetAllSubjectsQueryHandlerToken } from "../../../../subjects/application/queries/GetAllSubjects";
 
 export async function createStudySession(
   message: OmitPartialGroupDMChannel<Message<boolean>>,
   args: string[]
 ) {
+  const getAllSubjectsQuery = DependencyContainer.resolve(
+    GetAllSubjectsQueryHandlerToken
+  );
+
   const subjects = await getAllSubjectsQuery.handle({});
   console.log("AUTHOR que va a estudiar: ", message.author.id);
 

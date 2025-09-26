@@ -1,3 +1,4 @@
+import { createDIToken } from "fioc";
 import { IActiveChallengeRepository } from "../../domain/interfaces/IActiveChallengeRepository";
 
 type DeleteChallengeCommand = {
@@ -20,3 +21,8 @@ export class DeleteChallengeCommandHandler {
     this.challengeRepository.removeActiveChallenge(userId);
   }
 }
+
+export const DeleteChallengeCommandHandlerToken =
+  createDIToken<DeleteChallengeCommandHandler>(
+    "DeleteChallengeCommandHandler"
+  );

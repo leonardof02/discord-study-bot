@@ -1,3 +1,4 @@
+import { createDIToken } from "fioc";
 import { IFinishedStudySessionRepository } from "../../../sessions/domain/interfaces/IFinishedStudySessionRepository";
 
 type GetStudyRankingQuery = {};
@@ -11,3 +12,6 @@ export class GetStudyRankingQueryHandler {
     return this.finishedStudySessionsRepository.getPointsSumsPerUser();
   }
 }
+
+export const GetStudyRankingQueryHandlerToken =
+  createDIToken<GetStudyRankingQueryHandler>("GetStudyRankingQueryHandler");

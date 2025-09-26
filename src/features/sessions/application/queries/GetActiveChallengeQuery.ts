@@ -1,3 +1,4 @@
+import { createDIToken } from "fioc";
 import { IActiveChallengeRepository } from "../../domain/interfaces/IActiveChallengeRepository";
 
 type GetActiveChallengeQuery = {
@@ -17,3 +18,8 @@ export class GetActiveChallengeQueryHandler {
     return existentChallenge;
   }
 }
+
+export const GetActiveChallengeQueryHandlerToken =
+  createDIToken<GetActiveChallengeQueryHandler>(
+    "GetActiveChallengeQueryHandler"
+  );

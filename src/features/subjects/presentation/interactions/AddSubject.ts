@@ -1,8 +1,13 @@
 import { ButtonInteraction, StringSelectMenuInteraction } from "discord.js";
-import { addSubjectCommand } from "../../DependencyInjection";
 import { SubjectColor } from "../../domain/Subject";
+import { DependencyContainer } from "../../../../shared/DependencyInjectionContainer";
+import { AddSubjectCommandHandlerToken } from "../../application/command/AddSubjectCommand";
 
 export async function addSubject(interaction: StringSelectMenuInteraction) {
+  const addSubjectCommand = DependencyContainer.resolve(
+    AddSubjectCommandHandlerToken
+  );
+
   const subjectName = interaction.customId.split("@")[1];
   const color = interaction.values[0];
 

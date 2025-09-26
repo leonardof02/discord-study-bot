@@ -1,5 +1,6 @@
 // src/features/sessions/domain/IStudySessionRepository.ts
 
+import { createDIToken } from "fioc";
 import { StudySession } from "../entities/StudySession";
 
 export interface IActiveStudySessionRepository {
@@ -8,3 +9,6 @@ export interface IActiveStudySessionRepository {
   getStudySession(userId: string): StudySession | undefined;
   saveSession(userId: string, studySession: StudySession): void;
 }
+
+export const IActiveStudySessionRepositoryToken =
+  createDIToken<IActiveStudySessionRepository>("IActiveStudySessionRepository");

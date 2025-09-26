@@ -1,22 +1,30 @@
 import {
   ActionRowBuilder,
   ButtonBuilder,
-  ButtonInteraction,
   ButtonStyle,
   StringSelectMenuInteraction,
 } from "discord.js";
-import {
-  finishStudySessionCommandHandler,
-  getActiveChallengeQueryHandler,
-  startStudySessionCommandHandler,
-} from "../../../DependencyInjection";
-import { getSubjectQuery } from "../../../../subjects/DependencyInjection";
 import { formatDuration } from "../../../../../shared/presentation/utils/TimeUtils";
 import SessionButtonActions from "../../constants/SessionInteractions";
+import { DependencyContainer } from "../../../../../shared/DependencyInjectionContainer";
+import { GetSubjectQueryHandlerToken } from "../../../../subjects/application/queries/GetSubject";
+import { StartStudySessionCommandHandlerToken } from "../../../application/commands/StartStudySessionCommand";
+import { GetActiveChallengeQueryHandlerToken } from "../../../application/queries/GetActiveChallengeQuery";
 
 export async function startStudySession(
   interaction: StringSelectMenuInteraction
 ) {
+
+  const getActiveChallengeQueryHandler = DependencyContainer.resolve(
+    GetActiveChallengeQueryHandlerToken
+  );
+
+  const startStudySessionCommandHandler = DependencyContainer.resolve(
+    StartStudySessionCommandHandlerToken
+  );
+
+  const getSubjectQuery = DependencyContainer.resolve(GetSubjectQueryHandlerToken);
+
   try {
     const userId = interaction.customId.split("@")[1];
     const subjectId = interaction.values[0];

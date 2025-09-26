@@ -1,10 +1,7 @@
+import { createDIToken } from "fioc";
 import { ISubjectRepository } from "../../domain/ISubjectRepository";
 import { Subject, SubjectColor } from "../../domain/Subject";
 import { v4 as uuidv4 } from "uuid";
-
-export type RemoveSubjectCommand = {
-  id: string;
-};
 
 export type AddSubjectCommand = {
   name: string;
@@ -34,3 +31,7 @@ export class AddSubjectCommandHandler {
     await this.subjectRepository.addSubject(newSubject);
   }
 }
+
+export const AddSubjectCommandHandlerToken = createDIToken<AddSubjectCommandHandler>(
+  "AddSubjectCommandHandler"
+);

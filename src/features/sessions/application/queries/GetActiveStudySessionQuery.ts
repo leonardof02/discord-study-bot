@@ -1,3 +1,4 @@
+import { createDIToken } from "fioc";
 import { IActiveStudySessionRepository } from "../../domain/interfaces/IActiveStudySessionRepository";
 
 type GetActiveStudySessionQuery = {
@@ -18,3 +19,8 @@ export class GetActiveStudySessionQueryHandler {
     return activeSession;
   }
 }
+
+export const GetActiveStudySessionQueryHandlerToken =
+  createDIToken<GetActiveStudySessionQueryHandler>(
+    "GetActiveStudySessionQueryHandler"
+  );

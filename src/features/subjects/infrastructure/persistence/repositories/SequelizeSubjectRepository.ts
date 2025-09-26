@@ -2,13 +2,11 @@ import { ISubjectRepository } from "../../../domain/ISubjectRepository";
 import { Subject } from "../../../domain/Subject";
 import { SubjectModel } from "../models/SubjectModel";
 import { RegexTool } from "../../../domain/RegexTool";
+import { createDIToken } from "fioc";
+
 
 export class SequelizeSubjectRepository implements ISubjectRepository {
-  private readonly _regexTool: RegexTool;
-
-  constructor() {
-    this._regexTool = new RegexTool();
-  }
+  constructor(private readonly regexTool: RegexTool) {}
   findSubjectByName(name: string): Promise<Subject | null> {
     return SubjectModel.findOne({
       where: {
@@ -49,7 +47,7 @@ export class SequelizeSubjectRepository implements ISubjectRepository {
 
   async findSubjectByQueryString(name: string): Promise<Subject | null> {
     const allSubjects = await SubjectModel.findAll();
-    const regex = this._regexTool.createPartialMatchRegex(name);
+    const regex = this.regexTool.createPartialMatchRegex(name);
     const matchedSubjects = allSubjects.filter((subject) =>
       regex.test(subject.dataValues.name)
     );

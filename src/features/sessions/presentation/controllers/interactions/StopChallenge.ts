@@ -1,10 +1,15 @@
 import { ButtonInteraction, EmbedBuilder } from "discord.js";
-import { deleteChallengeCommandHandler } from "../../../DependencyInjection";
+import { DependencyContainer } from "../../../../../shared/DependencyInjectionContainer";
+import { DeleteChallengeCommandHandlerToken } from "../../../application/commands/DeleteChallengeCommand";
 
 /** Elimina un reto personalizado ya creado por el usuario
  * @param interaction La interacción resultado del boton de eliminar el reto
  */
 export async function stopChallenge(interaction: ButtonInteraction) {
+  const deleteChallengeCommandHandler = DependencyContainer.resolve(
+    DeleteChallengeCommandHandlerToken
+  );
+
   try {
     const userId = interaction.user.id;
     deleteChallengeCommandHandler.handle({ userId });

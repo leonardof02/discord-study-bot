@@ -1,6 +1,7 @@
 import { ChallengeType } from "../../domain/entities/ChallengeType";
 import { RandomChallengeDificultyService } from "../../domain/services/RandomChallengeDificultyService";
 import { IActiveChallengeRepository } from "../../domain/interfaces/IActiveChallengeRepository";
+import { createDIToken } from "fioc";
 
 type CreateRandomChallengeCommand = {
   userId: string;
@@ -34,3 +35,8 @@ export class CreateRandomChallengeCommandHandler {
     return challengeTime;
   }
 }
+
+export const CreateRandomChallengeCommandHandlerToken =
+  createDIToken<CreateRandomChallengeCommandHandler>(
+    "CreateRandomChallengeCommandHandler"
+  );

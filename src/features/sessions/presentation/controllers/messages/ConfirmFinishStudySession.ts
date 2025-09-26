@@ -6,12 +6,17 @@ import {
   ActionRowBuilder,
 } from "discord.js";
 import SessionButtonActions from "../../constants/SessionInteractions";
-import { getActiveStudySessionQueryHandler } from "../../../DependencyInjection";
+import { DependencyContainer } from "../../../../../shared/DependencyInjectionContainer";
+import { GetActiveStudySessionQueryHandlerToken } from "../../../application/queries/GetActiveStudySessionQuery";
 
 export async function confirmFinishStudySession(
   message: OmitPartialGroupDMChannel<Message<boolean>>,
   args: string[]
 ) {
+  const getActiveStudySessionQueryHandler = DependencyContainer.resolve(
+    GetActiveStudySessionQueryHandlerToken
+  );
+
   try {
     const userId = message.author.id;
     const existingSession = getActiveStudySessionQueryHandler.handle({

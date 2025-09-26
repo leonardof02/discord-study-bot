@@ -7,7 +7,8 @@ import {
 } from "discord.js";
 import SessionButtonActions from "../../constants/SessionInteractions";
 import { parseTimeStringToSeconds } from "../../../../../shared/presentation/utils/TimeUtils";
-import { createCustomChallengeCommandHandler } from "../../../DependencyInjection";
+import { DependencyContainer } from "../../../../../shared/DependencyInjectionContainer";
+import { CreateCustomChallengeCommandHandlerToken } from "../../../application/commands/CreateCustomChallengeCommand";
 
 /** Crea un reto personalizado segun el tiempo indicado en el mensaje
  * @param message Mensaje enviado por el usuario
@@ -17,6 +18,10 @@ export function createCustomChallenge(
   message: OmitPartialGroupDMChannel<Message<boolean>>,
   args: string[]
 ) {
+  const createCustomChallengeCommandHandler = DependencyContainer.resolve(
+    CreateCustomChallengeCommandHandlerToken
+  );
+
   const userId = message.author.id;
 
   if (!args[0]) {
