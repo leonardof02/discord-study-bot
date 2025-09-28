@@ -1,0 +1,26 @@
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    env_file: .env
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    networks:
+      - default-net
+
+  bot:
+    build: .
+    restart: always
+    env_file: .env
+    depends_on:
+      - db
+    networks:
+      - default-net
+
+networks:
+  default-net:
+
+volumes:
+  postgres-data:
