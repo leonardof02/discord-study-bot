@@ -13,6 +13,7 @@ const envSchema = z.object({
   DB_NAME: z.string(),
 });
 
+
 const parsedEnv = envSchema.safeParse(process.env);
 
 if (!parsedEnv.success) {
