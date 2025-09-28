@@ -1,8 +1,8 @@
 FROM node:20-alpine
 
-# Install pnpm
-RUN npm add -g typescript
-RUN npm add -g nodemon
+# Install npm
+RUN npm install -g typescript
+RUN npm install -g tsx
 
 WORKDIR /app
 

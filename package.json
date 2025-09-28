@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node ./dist/Bot.js",
-    "prod": "tsc && node dist/Bot.js",
+    "prod": "tsx ./src/Bot.ts",
     "dev": "nodemon --exec tsx src/Bot.ts",
     "test": "vitest",
     "test:run": "vitest run",
