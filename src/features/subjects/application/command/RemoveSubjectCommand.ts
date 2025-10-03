@@ -1,8 +1,8 @@
-import { createDIToken } from "fioc";
+import { createDIToken } from "@fioc/core";
 import { ISubjectRepository } from "../../domain/ISubjectRepository";
 
 export const RemoveSubjectCommandHandlerToken =
-  createDIToken<RemoveSubjectCommandHandler>("RemoveSubjectCommandHandler");
+  createDIToken<RemoveSubjectCommandHandler>().as("RemoveSubjectCommandHandler");
 
 export type RemoveSubjectCommand = {
   id: string;

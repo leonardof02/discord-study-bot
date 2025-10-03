@@ -1,4 +1,4 @@
-import { createDIToken } from "fioc";
+import { createDIToken } from "@fioc/core";
 import { IActiveChallengeRepository } from "../../domain/interfaces/IActiveChallengeRepository";
 
 type GetActiveChallengeQuery = {
@@ -20,6 +20,6 @@ export class GetActiveChallengeQueryHandler {
 }
 
 export const GetActiveChallengeQueryHandlerToken =
-  createDIToken<GetActiveChallengeQueryHandler>(
+  createDIToken<GetActiveChallengeQueryHandler>().as(
     "GetActiveChallengeQueryHandler"
   );

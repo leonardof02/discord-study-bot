@@ -1,4 +1,4 @@
-import { createDIToken } from "fioc";
+import { createDIToken } from "@fioc/core";
 import { IFinishedStudySessionRepository } from "../../domain/interfaces/IFinishedStudySessionRepository";
 import * as ArchivedSessionsRepository from "../../infrastructure/persistence/repositories/SequelizeFinishedSessionsRepository";
 
@@ -18,6 +18,6 @@ export class GetLastStudySessionsQueryHandler {
 }
 
 export const GetLastStudySessionsQueryHandlerToken =
-  createDIToken<GetLastStudySessionsQueryHandler>(
+  createDIToken<GetLastStudySessionsQueryHandler>().as(
     "GetLastStudySessionsQueryHandler"
   );

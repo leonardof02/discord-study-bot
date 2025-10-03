@@ -1,4 +1,4 @@
-import { createDIToken } from "fioc";
+import { createDIToken } from "@fioc/core";
 import { IActiveChallengeRepository } from "../../domain/interfaces/IActiveChallengeRepository";
 
 type CreateCustomChallengeCommand = {
@@ -30,6 +30,6 @@ export class CreateCustomChallengeCommandHandler {
 }
 
 export const CreateCustomChallengeCommandHandlerToken =
-  createDIToken<CreateCustomChallengeCommandHandler>(
+  createDIToken<CreateCustomChallengeCommandHandler>().as(
     "CreateCustomChallengeCommandHandler"
   );

@@ -1,4 +1,4 @@
-import { buildDIContainer, toFactory } from "fioc";
+import { constructorToFactory, buildDIContainer } from "@fioc/core";
 import {
   AddSubjectCommandHandler,
   AddSubjectCommandHandlerToken,
@@ -21,30 +21,30 @@ import { ISubjectRepositoryToken } from "./domain/ISubjectRepository";
 
 const SubjectContainer = buildDIContainer()
   .register(RegexToolToken, new RegexTool())
-  .registerConsumer({
-    token: ISubjectRepositoryToken,
-    dependencies: [RegexToolToken],
-    factory: toFactory(SequelizeSubjectRepository),
-  })
-  .registerConsumer({
-    token: AddSubjectCommandHandlerToken,
-    dependencies: [ISubjectRepositoryToken],
-    factory: toFactory(AddSubjectCommandHandler),
-  })
-  .registerConsumer({
-    token: RemoveSubjectCommandHandlerToken,
-    dependencies: [ISubjectRepositoryToken],
-    factory: toFactory(RemoveSubjectCommandHandler),
-  })
-  .registerConsumer({
-    token: GetAllSubjectsQueryHandlerToken,
-    dependencies: [ISubjectRepositoryToken],
-    factory: toFactory(GetAllSubjectsQueryHandler),
-  })
-  .registerConsumer({
+  .registerFactory({
     token: GetSubjectQueryHandlerToken,
     dependencies: [ISubjectRepositoryToken],
-    factory: toFactory(GetSubjectQueryHandler),
+    factory: constructorToFactory(GetSubjectQueryHandler),
+  })
+  .registerFactory({
+    token: ISubjectRepositoryToken,
+    dependencies: [RegexToolToken],
+    factory: constructorToFactory(SequelizeSubjectRepository),
+  })
+  .registerFactory({
+    token: AddSubjectCommandHandlerToken,
+    dependencies: [ISubjectRepositoryToken],
+    factory: constructorToFactory(AddSubjectCommandHandler),
+  })
+  .registerFactory({
+    token: RemoveSubjectCommandHandlerToken,
+    dependencies: [ISubjectRepositoryToken],
+    factory: constructorToFactory(RemoveSubjectCommandHandler),
+  })
+  .registerFactory({
+    token: GetAllSubjectsQueryHandlerToken,
+    dependencies: [ISubjectRepositoryToken],
+    factory: constructorToFactory(GetAllSubjectsQueryHandler),
   })
   .getResult();
 

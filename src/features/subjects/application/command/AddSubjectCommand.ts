@@ -1,4 +1,4 @@
-import { createDIToken } from "fioc";
+import { createDIToken } from "@fioc/core";
 import { ISubjectRepository } from "../../domain/ISubjectRepository";
 import { Subject, SubjectColor } from "../../domain/Subject";
 import { v4 as uuidv4 } from "uuid";
@@ -32,6 +32,5 @@ export class AddSubjectCommandHandler {
   }
 }
 
-export const AddSubjectCommandHandlerToken = createDIToken<AddSubjectCommandHandler>(
-  "AddSubjectCommandHandler"
-);
+export const AddSubjectCommandHandlerToken =
+  createDIToken<AddSubjectCommandHandler>().as("AddSubjectCommandHandler");

@@ -3,9 +3,9 @@ import { IActiveChallengeRepository } from "../../../domain/interfaces/IActiveCh
 export class InMemoryActiveChallengeRepository
   implements IActiveChallengeRepository
 {
-  constructor(
-    private readonly activeChallenges: Record<string, Challenge> = {}
-  ) {}
+  private readonly activeChallenges: Record<string, Challenge> = {};
+
+  constructor() {}
 
   getActiveChallenge(userId: string) {
     return this.activeChallenges[userId];

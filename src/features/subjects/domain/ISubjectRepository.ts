@@ -1,4 +1,4 @@
-import { createDIToken } from "fioc";
+import { createDIToken } from "@fioc/core";
 import { SequelizeSubjectRepository } from "../infrastructure/persistence/repositories/SequelizeSubjectRepository";
 import { Subject } from "./Subject";
 
@@ -13,4 +13,4 @@ export interface ISubjectRepository {
 }
 
 export const ISubjectRepositoryToken =
-  createDIToken<ISubjectRepository>("ISubjectRepository");
+  createDIToken<ISubjectRepository>().as("ISubjectRepository");

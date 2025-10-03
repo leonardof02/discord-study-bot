@@ -1,9 +1,4 @@
-// import { sequelizeFinishedSessionsRepository } from "../sessions/DependencyInjection";
-// import { GetDetailedStudyRankingQueryHandler } from "./application/queries/GetDetailedRankingQuery";
-// import { GetPointsByUserQueryHandler } from "./application/queries/GetPointsByUserQuery";
-// import { GetStudyRankingQueryHandler } from "./application/queries/GetStudyRankingQuery";
-
-import { buildDIContainer, toFactory } from "fioc";
+import { buildDIContainer, constructorToFactory } from "@fioc/core";
 import { IFinishedStudySessionRepositoryToken } from "../sessions/domain/interfaces/IFinishedStudySessionRepository";
 import {
   GetStudyRankingQueryHandler,
@@ -18,40 +13,24 @@ import {
   GetPointsByUserQueryHandlerToken,
 } from "./application/queries/GetPointsByUserQuery";
 
-// const getRankingCommandHandler = new GetStudyRankingQueryHandler(
-//   sequelizeFinishedSessionsRepository
-// );
-
-// const getDetailedRankingQueryHandler = new GetDetailedStudyRankingQueryHandler(
-//   sequelizeFinishedSessionsRepository
-// );
-
-// const getPointsByUserQueryHandler = new GetPointsByUserQueryHandler(
-//   sequelizeFinishedSessionsRepository
-// );
-
-// export {
-//   getRankingCommandHandler,
-//   getDetailedRankingQueryHandler,
-//   getPointsByUserQueryHandler,
-// };
-
 const PointsContainer = buildDIContainer()
-  .registerConsumer({
-    dependencies: [IFinishedStudySessionRepositoryToken],
-    token: GetStudyRankingQueryHandlerToken,
-    factory: toFactory(GetStudyRankingQueryHandler),
-  })
-  .registerConsumer({
-    dependencies: [IFinishedStudySessionRepositoryToken],
-    token: GetDetailedStudyRankingQueryHandlerToken,
-    factory: toFactory(GetDetailedStudyRankingQueryHandler),
-  })
-  .registerConsumer({
-    dependencies: [IFinishedStudySessionRepositoryToken],
-    token: GetPointsByUserQueryHandlerToken,
-    factory: toFactory(GetPointsByUserQueryHandler),
-  })
+  .registerFactoryArray([
+    {
+      dependencies: [IFinishedStudySessionRepositoryToken],
+      token: GetStudyRankingQueryHandlerToken,
+      factory: constructorToFactory(GetStudyRankingQueryHandler),
+    },
+    {
+      dependencies: [IFinishedStudySessionRepositoryToken],
+      token: GetDetailedStudyRankingQueryHandlerToken,
+      factory: constructorToFactory(GetDetailedStudyRankingQueryHandler),
+    },
+    {
+      dependencies: [IFinishedStudySessionRepositoryToken],
+      token: GetPointsByUserQueryHandlerToken,
+      factory: constructorToFactory(GetPointsByUserQueryHandler),
+    },
+  ])
   .getResult();
 
 const PointsContainerState = PointsContainer.getState();

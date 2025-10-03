@@ -1,4 +1,4 @@
-import { createDIToken } from "fioc";
+import { createDIToken } from "@fioc/core";
 import { IFinishedStudySessionRepository } from "../../../sessions/domain/interfaces/IFinishedStudySessionRepository";
 
 type GetPointsByUserQuery = {
@@ -18,4 +18,6 @@ export class GetPointsByUserQueryHandler {
 }
 
 export const GetPointsByUserQueryHandlerToken =
-  createDIToken<GetPointsByUserQueryHandler>("GetPointsByUserQueryHandler");
+  createDIToken<GetPointsByUserQueryHandler>().as(
+    "GetPointsByUserQueryHandler"
+  );

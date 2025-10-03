@@ -1,6 +1,4 @@
-import { createDIToken } from "fioc";
-
-export const RegexToolToken = createDIToken<RegexTool>("RegexTool");
+import { createDIToken } from "@fioc/core";
 
 export class RegexTool {
   private readonly accentMap: { [key: string]: string } = {
@@ -25,3 +23,5 @@ export class RegexTool {
     return new RegExp(regexString, "i");
   }
 }
+
+export const RegexToolToken = createDIToken<RegexTool>().as("RegexTool");

@@ -8,6 +8,12 @@ importers:
 
   .:
     dependencies:
+      '@fioc/core':
+        specifier: ^1.5.2
+        version: 1.5.2
+      '@fioc/strict':
+        specifier: ^1.0.0
+        version: 1.0.0
       '@types/sequelize':
         specifier: ^4.28.20
         version: 4.28.20
@@ -20,9 +26,6 @@ importers:
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
-      fioc:
-        specifier: ^1.2.4
-        version: 1.2.4
       knex:
         specifier: ^3.1.0
         version: 3.1.0(pg@8.16.3)(sqlite3@5.1.7)
@@ -452,6 +455,12 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@fioc/core@1.5.2':
+    resolution: {integrity: sha512-Xg186Esj63cuHot0XRgwonm3RpsG9oeyK185TDYM0UopFYVy9txM3vOrbz7e5y5ecEghFV++EjPc149UXZlJDA==}
+
+  '@fioc/strict@1.0.0':
+    resolution: {integrity: sha512-iLxjWR+4uOFLOcjZQXWt5v11OzDv5YkSHqWFO/eH6HDmkohmY9i1IiI/8Lr/ICb2c9t5ANX2wBrQuTptnzIHSQ==}
 
   '@gar/promisify@1.1.3':
     resolution: {integrity: sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==}
@@ -1400,9 +1409,6 @@ packages:
   find-up@4.1.0:
     resolution: {integrity: sha512-PpOwAdQ/YlXQ2vj8a3h8IipDuYRi3wceVQQGYWxNINccq40Anw7BlsEXCMbt1Zt+OLA6Fq9suIpIWD0OsnISlw==}
     engines: {node: '>=8'}
-
-  fioc@1.2.4:
-    resolution: {integrity: sha512-wsUC+pYNi9fJ2DeUiZjkWe6sxrgCfa2wghx+HCo2H+yeEHQ6EY9pJYtNlEpRUGblt0NU+TxK7tu67nNiEbtG7w==}
 
   foreground-child@3.3.1:
     resolution: {integrity: sha512-gIXjKqtFuWEgzFRJA9WCQeSJLZDjgJUOMCMzxtvFq/37KojM1BFGufqsCy0r4qSQmYLsZYMeyRqzIWOMup03sw==}
@@ -3164,6 +3170,15 @@ snapshots:
   '@esbuild/win32-x64@0.25.9':
     optional: true
 
+  '@fioc/core@1.5.2':
+    dependencies:
+      immer: 10.1.3
+
+  '@fioc/strict@1.0.0':
+    dependencies:
+      '@fioc/core': 1.5.2
+      immer: 10.1.3
+
   '@gar/promisify@1.1.3':
     optional: true
 
@@ -4188,10 +4203,6 @@ snapshots:
     dependencies:
       locate-path: 5.0.0
       path-exists: 4.0.0
-
-  fioc@1.2.4:
-    dependencies:
-      immer: 10.1.3
 
   foreground-child@3.3.1:
     dependencies:

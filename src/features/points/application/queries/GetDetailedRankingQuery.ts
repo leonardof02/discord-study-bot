@@ -1,4 +1,4 @@
-import { createDIToken } from "fioc";
+import { createDIToken } from "@fioc/core";
 import { IFinishedStudySessionRepository } from "../../../sessions/domain/interfaces/IFinishedStudySessionRepository";
 
 type GetDetailedStudyRankingQuery = {};
@@ -14,6 +14,6 @@ export class GetDetailedStudyRankingQueryHandler {
 }
 
 export const GetDetailedStudyRankingQueryHandlerToken =
-  createDIToken<GetDetailedStudyRankingQueryHandler>(
+  createDIToken<GetDetailedStudyRankingQueryHandler>().as(
     "GetDetailedStudyRankingQueryHandler"
   );

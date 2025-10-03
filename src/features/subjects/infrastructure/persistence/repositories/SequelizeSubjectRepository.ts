@@ -2,7 +2,7 @@ import { ISubjectRepository } from "../../../domain/ISubjectRepository";
 import { Subject } from "../../../domain/Subject";
 import { SubjectModel } from "../models/SubjectModel";
 import { RegexTool } from "../../../domain/RegexTool";
-import { createDIToken } from "fioc";
+import { createDIToken } from "@fioc/core";
 
 
 export class SequelizeSubjectRepository implements ISubjectRepository {

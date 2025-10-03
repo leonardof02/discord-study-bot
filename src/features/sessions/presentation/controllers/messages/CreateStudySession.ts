@@ -19,6 +19,13 @@ export async function createStudySession(
   );
 
   const subjects = await getAllSubjectsQuery.handle({});
+  if (subjects.length === 0) {
+    message.reply(
+      `<@${message.author.id}> No tienes asignaturas creadas, crea una con !nueva_asignatura nombre`
+    );
+    return;
+  }
+
   console.log("AUTHOR que va a estudiar: ", message.author.id);
 
   const selectSubjectButtons =

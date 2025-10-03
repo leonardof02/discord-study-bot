@@ -1,4 +1,4 @@
-import { createDIToken } from "fioc";
+import { createDIToken } from "@fioc/core";
 import { IActiveChallengeRepository } from "../../domain/interfaces/IActiveChallengeRepository";
 
 type DeleteChallengeCommand = {
@@ -23,6 +23,6 @@ export class DeleteChallengeCommandHandler {
 }
 
 export const DeleteChallengeCommandHandlerToken =
-  createDIToken<DeleteChallengeCommandHandler>(
+  createDIToken<DeleteChallengeCommandHandler>().as(
     "DeleteChallengeCommandHandler"
   );

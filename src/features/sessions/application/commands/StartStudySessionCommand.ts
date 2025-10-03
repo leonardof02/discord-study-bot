@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import { StudySession } from "../../domain/entities/StudySession";
 import { IActiveChallengeRepository } from "../../domain/interfaces/IActiveChallengeRepository";
 import { IActiveStudySessionRepository } from "../../domain/interfaces/IActiveStudySessionRepository";
-import { createDIToken } from "fioc";
+import { createDIToken } from "@fioc/core";
 
 type StartStudySessionCommand = {
   userId: string;
@@ -48,6 +48,6 @@ export class StartStudySessionCommandHandler {
 }
 
 export const StartStudySessionCommandHandlerToken =
-  createDIToken<StartStudySessionCommandHandler>(
+  createDIToken<StartStudySessionCommandHandler>().as(
     "StartStudySessionCommandHandler"
   );

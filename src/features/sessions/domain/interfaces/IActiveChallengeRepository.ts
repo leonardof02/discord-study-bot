@@ -1,4 +1,4 @@
-import { createDIToken } from "fioc";
+import { createDIToken } from "@fioc/core";
 
 export interface IActiveChallengeRepository {
   getActiveChallenge(userId: string): Challenge | undefined;
@@ -7,4 +7,4 @@ export interface IActiveChallengeRepository {
 }
 
 export const IActiveChallengeRepositoryToken =
-  createDIToken<IActiveChallengeRepository>("IActiveChallengeRepository");
+  createDIToken<IActiveChallengeRepository>().as("IActiveChallengeRepository");

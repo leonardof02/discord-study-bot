@@ -20,7 +20,7 @@ const DbConnection = new Sequelize({
 export async function syncDatabase() {
   try {
     DbConnection.authenticate();
-    await DbConnection.sync({ alter: true, force: true });
+    await DbConnection.sync({ alter: true, logging: false });
     console.log("Database synced!");
   } catch (error) {
     console.error("Error syncing database:", error);

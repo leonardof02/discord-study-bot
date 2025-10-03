@@ -1,6 +1,6 @@
 // src/features/sessions/domain/IArchivedStudySessionRepository.ts
 
-import { createDIToken } from "fioc";
+import { createDIToken } from "@fioc/core";
 import { SubjectScore } from "../../../points/domain/SubjectScore";
 import { UserScore } from "../../../points/domain/UserScore";
 import { StudySession } from "../entities/StudySession";
@@ -20,6 +20,6 @@ export interface IFinishedStudySessionRepository {
 }
 
 export const IFinishedStudySessionRepositoryToken =
-  createDIToken<IFinishedStudySessionRepository>(
+  createDIToken<IFinishedStudySessionRepository>().as(
     "IFinishedStudySessionRepository"
   );

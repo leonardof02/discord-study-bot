@@ -7,27 +7,34 @@ export async function finishStudySession(interaction: ButtonInteraction) {
     FinishStudySessionCommandHandlerToken
   );
 
-  const userId = interaction.user.id;
-
   try {
     const finishedStudySessionData =
-      await finishStudySessionCommandHandler.handle({ userId });
+      await finishStudySessionCommandHandler.handle({
+        userId: interaction.user.id,
+      });
 
-    const { subjectId, challenge, humanReadableTotalTime, points, id } =
-      finishedStudySessionData;
+    const {
+      subjectName,
+      challenge,
+      totalTime,
+      points,
+      userId,
+      isChallengeCompleted,
+      sessionId,
+    } = finishedStudySessionData;
 
     const replyText = `Terminada sesión de estudio de <@${userId}>${
-      subjectId ? "\n🔖 Asignatura: ${subjectId}" : `\n🔖 Estudio general`
+      subjectName ? `\n🔖 Asignatura: ${subjectName}` : `\n🔖 Estudio general`
     }
-  🕑 Tiempo Total: ${humanReadableTotalTime}
+  🕑 Tiempo Total: ${totalTime}
   💯 Puntuación obtenida: ${points}${
-      challenge != null
-        ? finishedStudySessionData.isChallengeCompleted
+      challenge
+        ? isChallengeCompleted
           ? "\n✅ Reto completado con éxito\n➕ Puntos extra ganados"
           : "\n❌ No has completado el reto\n➖ Has perdido todos los puntos del reto"
         : ""
     }
-  🔑 ID SESIÓN: ${id}`;
+  🔑 ID SESIÓN: ${sessionId}`;
 
     interaction.update({
       content: replyText,

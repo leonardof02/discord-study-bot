@@ -1,4 +1,4 @@
-import { createDIToken } from "fioc";
+import { createDIToken } from "@fioc/core";
 import { ISubjectRepository } from "../../domain/ISubjectRepository";
 
 export type GetAllSubjectsQuery = {};
@@ -13,5 +13,5 @@ export class GetAllSubjectsQueryHandler {
 }
 
 export const GetAllSubjectsQueryHandlerToken =
-  createDIToken<GetAllSubjectsQueryHandler>("GetAllSubjectsQueryHandler");
+  createDIToken<GetAllSubjectsQueryHandler>().as("GetAllSubjectsQueryHandler");
 

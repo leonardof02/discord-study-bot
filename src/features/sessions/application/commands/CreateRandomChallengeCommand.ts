@@ -1,7 +1,7 @@
 import { ChallengeType } from "../../domain/entities/ChallengeType";
 import { RandomChallengeDificultyService } from "../../domain/services/RandomChallengeDificultyService";
 import { IActiveChallengeRepository } from "../../domain/interfaces/IActiveChallengeRepository";
-import { createDIToken } from "fioc";
+import { createDIToken } from "@fioc/core";
 
 type CreateRandomChallengeCommand = {
   userId: string;
@@ -37,6 +37,6 @@ export class CreateRandomChallengeCommandHandler {
 }
 
 export const CreateRandomChallengeCommandHandlerToken =
-  createDIToken<CreateRandomChallengeCommandHandler>(
+  createDIToken<CreateRandomChallengeCommandHandler>().as(
     "CreateRandomChallengeCommandHandler"
   );
